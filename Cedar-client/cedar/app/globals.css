@@ -1,0 +1,44 @@
+@import "tailwindcss";
+
+
+/* Navigation Buttons */
+
+.swiper-button-next,
+.swiper-button-prev {
+  color: #c4954a !important;
+  width: 48px !important;
+  height: 48px !important;
+  background: rgba(196, 149, 74, 0.08);
+  border: 1px solid rgba(196, 149, 74, 0.2);
+  border-radius: 9999px;
+  transition: 0.3s;
+}
+
+.swiper-button-next:hover,
+.swiper-button-prev:hover {
+  background: rgba(196, 149, 74, 0.15);
+}
+
+.swiper-button-next::after,
+.swiper-button-prev::after {
+  font-size: 16px !important;
+  font-weight: 700;
+}
+
+/* Pagination */
+
+.swiper-pagination {
+  margin-top: 2rem;
+  position: relative !important;
+}
+
+.swiper-pagination-bullet {
+  width: 10px;
+  height: 10px;
+  background: #6b5b45;
+  opacity: 1;
+}
+
+.swiper-pagination-bullet-active {
+  background: #c4954a;
+}
