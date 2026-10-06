@@ -464,23 +464,33 @@ const ApartmentDetailsPage = () => {
 
             {/* Reserve */}
             <button
+              type="button"
               onClick={() => {
                 if (!checkIn || !checkOut || nights <= 0) {
                   alert(
-                    "Please select your check-in and check-out dates."
+                    "Please select a valid check-in and check-out date."
                   );
 
                   return;
                 }
 
-                console.log("Booking:", {
-                  apartment: apartment._id,
-                  checkIn,
-                  checkOut,
-                  guests,
-                  nights,
-                  total,
-                });
+                if (guests < 1 || guests > apartment.guests) {
+                  alert(
+                    `This apartment allows a maximum of ${apartment.guests} guests.`
+                  );
+
+                  return;
+                }
+
+                router.push(
+                  `/checkout?type=booking&slug=${encodeURIComponent(
+                    apartment.slug
+                  )}&checkIn=${encodeURIComponent(
+                    checkIn
+                  )}&checkOut=${encodeURIComponent(
+                    checkOut
+                  )}&guests=${guests}`
+                );
               }}
               className="w-full py-4 bg-[#c4954a] text-[#0c0a08] font-['Jost'] font-medium hover:bg-[#d5aa63] transition-colors"
             >

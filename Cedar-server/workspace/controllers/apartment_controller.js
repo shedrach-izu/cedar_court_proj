@@ -217,3 +217,29 @@ export const getApartmentsByCategoryId = async (req, res) => {
         res.status(500).json({ message: error.message })
     }
 }
+
+
+
+
+/**
+ * @description Get all featured apartments
+ * @route GET /api/apartment/featured
+ * @access Public
+ */
+
+
+
+export const getFeaturedApartments = async (req, res) => {
+    try {
+        const featuredApartments = await Apartment.find({ isFeatured: true});
+
+        if(!featuredApartments || featuredApartments.length === 0){
+            return res.status(404).json({ message: "no featured apartment found" })
+        }
+
+        res.status(200).json(featuredApartments);
+    } catch (error) {
+        console.log("Error getting featured apartments:", error);
+        res.status(500).json({ message: error.message })
+    }
+}

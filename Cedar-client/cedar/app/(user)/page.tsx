@@ -20,7 +20,7 @@ const HomePage = () => {
         <Amenities />
         <Testimonial />
         <CTA />
-        <Map />
+        {/* <Map /> */}
       </main>
     </div>
   );

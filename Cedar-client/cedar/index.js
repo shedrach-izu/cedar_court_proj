@@ -1,10 +1,10 @@
 export const navLinks = [
     { label: "Home", href: "/" },
-    { label: "Apartment", href: "apartments" },
-    { label: "Menu", href: "menu" },
-    { label: "Gallery", href: "gallery" },
-    { label: "About", href: "about" },
-    { label: "Contact", href: "contact" },
+    { label: "Apartment", href: "/apartments" },
+    { label: "Menu", href: "/menu" },
+    { label: "Gallery", href: "/gallery" },
+    { label: "About", href: "/about" },
+    { label: "Contact", href: "/contact" },
 ];
 
 

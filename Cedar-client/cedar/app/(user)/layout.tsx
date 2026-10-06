@@ -1,20 +1,32 @@
-'use client';
+"use client";
 
 import Navbar from "@/component/user/Navbar";
 import Footer from "@/component/user/Footer";
-import { useState } from "react";
+import CartSlide from "@/component/user/CartSlide";
 
+import { AuthProvider } from "@/context/AuthContext";
+import { CartProvider } from "@/context/CartContext";
 
-export default function UserLayout({ children }: { children: React.ReactNode }) {
-  const [page, setPage] = useState("home");
-  
+export default function UserLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
   return (
-    <>
-      <Navbar page={page} setPage={setPage} />
+    <AuthProvider>
+      <CartProvider>
 
-      <main>{children}</main>
+        <Navbar />
 
-      <Footer />
-    </>
+        <CartSlide />
+
+        <main>
+          {children}
+        </main>
+
+        <Footer />
+
+      </CartProvider>
+    </AuthProvider>
   );
 }
