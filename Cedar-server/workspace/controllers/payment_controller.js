@@ -1,98 +1,311 @@
 import axios from "axios";
 import Order from "../models/order_schema.js";
+import Booking from "../models/booking_schema.js";
 import crypto from "crypto";
 
 // =====================================
 // INITIALIZE PAYMENT
 // =====================================
 
+// export const initializePayment = async (req, res) => {
+//     try {
+//         const { orderId } = req.body;
+
+//         if (!orderId) {
+//             return res.status(400).json({
+//                 success: false,
+//                 message: "Order ID is required"
+//             });
+//         }
+
+//         // Find order belonging to logged-in user
+//         const order = await Order.findOne({
+//             _id: orderId,
+//             user: req.user._id
+//         });
+
+//         if (!order) {
+//             return res.status(404).json({
+//                 success: false,
+//                 message: "Order not found"
+//             });
+//         }
+
+//         // Don't initialize payment for already-paid order
+//         if (order.paymentInfo.paymentStatus === "paid") {
+//             return res.status(400).json({
+//                 success: false,
+//                 message: "Order has already been paid for"
+//             });
+//         }
+
+//         // ==============================
+//         // PAYSTACK
+//         // ==============================
+
+//         const response = await axios.post(
+//             "https://api.paystack.co/transaction/initialize",
+//             {
+//                 email: order.reservationDetails.email,
+
+//                 amount: Math.round(order.totalPrice * 100),
+
+//                 reference: order.orderId,
+
+//                 callback_url: `${process.env.FRONTEND_URL}/order-success`,
+
+//                 metadata: {
+//                     orderId: order._id.toString(),
+//                     orderNumber: order.orderId,
+//                     userId: req.user._id.toString()
+//                 }
+//             },
+//             {
+//                 headers: {
+//                     Authorization: `Bearer ${process.env.PAYSTACK_SECRET_KEY}`,
+//                     "Content-Type": "application/json"
+//                 }
+//             }
+//         );
+
+//         if (!response.data.status) {
+//             return res.status(400).json({
+//                 success: false,
+//                 message: "Unable to initialize payment"
+//             });
+//         }
+
+//         // Save Paystack reference
+//         order.paymentInfo.reference =
+//             response.data.data.reference;
+
+//         await order.save();
+
+//         return res.status(200).json({
+//             success: true,
+//             message: "Payment initialized successfully",
+
+//             authorizationUrl:
+//                 response.data.data.authorization_url,
+
+//             accessCode:
+//                 response.data.data.access_code,
+
+//             reference:
+//                 response.data.data.reference
+//         });
+
+//     } catch (error) {
+//         console.error(
+//             "Initialize payment error:",
+//             error.response?.data || error.message
+//         );
+
+//         return res.status(500).json({
+//             success: false,
+//             message: "Failed to initialize payment",
+//             error: error.response?.data?.message || error.message
+//         });
+//     }
+// };
+
+
 export const initializePayment = async (req, res) => {
     try {
-        const { orderId } = req.body;
+        const { orderId, bookingId } = req.body;
 
-        if (!orderId) {
+        // Must provide either orderId OR bookingId
+        if (!orderId && !bookingId) {
             return res.status(400).json({
                 success: false,
-                message: "Order ID is required"
+                message: "Order ID or Booking ID is required"
             });
         }
 
-        // Find order belonging to logged-in user
-        const order = await Order.findOne({
-            _id: orderId,
-            user: req.user._id
-        });
+        // =====================================================
+        // RESTAURANT ORDER PAYMENT
+        // =====================================================
 
-        if (!order) {
-            return res.status(404).json({
-                success: false,
-                message: "Order not found"
+        if (orderId) {
+            const order = await Order.findOne({
+                _id: orderId,
+                user: req.user._id
             });
-        }
 
-        // Don't initialize payment for already-paid order
-        if (order.paymentInfo.paymentStatus === "paid") {
-            return res.status(400).json({
-                success: false,
-                message: "Order has already been paid for"
-            });
-        }
-
-        // ==============================
-        // PAYSTACK
-        // ==============================
-
-        const response = await axios.post(
-            "https://api.paystack.co/transaction/initialize",
-            {
-                email: order.reservationDetails.email,
-
-                amount: Math.round(order.totalPrice * 100),
-
-                reference: order.orderId,
-
-                callback_url: `${process.env.FRONTEND_URL}/order-success`,
-
-                metadata: {
-                    orderId: order._id.toString(),
-                    orderNumber: order.orderId,
-                    userId: req.user._id.toString()
-                }
-            },
-            {
-                headers: {
-                    Authorization: `Bearer ${process.env.PAYSTACK_SECRET_KEY}`,
-                    "Content-Type": "application/json"
-                }
+            if (!order) {
+                return res.status(404).json({
+                    success: false,
+                    message: "Order not found"
+                });
             }
-        );
 
-        if (!response.data.status) {
-            return res.status(400).json({
-                success: false,
-                message: "Unable to initialize payment"
+            if (order.paymentInfo.paymentStatus === "paid") {
+                return res.status(400).json({
+                    success: false,
+                    message: "Order has already been paid for"
+                });
+            }
+
+            const response = await axios.post(
+                "https://api.paystack.co/transaction/initialize",
+                {
+                    email: order.reservationDetails.email,
+
+                    amount: Math.round(
+                        order.totalPrice * 100
+                    ),
+
+                    reference: order.orderId,
+
+                    callback_url:
+                        `${process.env.FRONTEND_URL}/order-success`,
+
+                    metadata: {
+                        type: "order",
+                        orderId: order._id.toString(),
+                        orderNumber: order.orderId,
+                        userId: req.user._id.toString()
+                    }
+                },
+                {
+                    headers: {
+                        Authorization:
+                            `Bearer ${process.env.PAYSTACK_SECRET_KEY}`,
+
+                        "Content-Type":
+                            "application/json"
+                    }
+                }
+            );
+
+            if (!response.data.status) {
+                return res.status(400).json({
+                    success: false,
+                    message: "Unable to initialize payment"
+                });
+            }
+
+            // Save Paystack reference
+            order.paymentInfo.reference =
+                response.data.data.reference;
+
+            await order.save();
+
+            return res.status(200).json({
+                success: true,
+                message:
+                    "Order payment initialized successfully",
+
+                authorizationUrl:
+                    response.data.data.authorization_url,
+
+                accessCode:
+                    response.data.data.access_code,
+
+                reference:
+                    response.data.data.reference
             });
         }
 
-        // Save Paystack reference
-        order.paymentInfo.reference =
-            response.data.data.reference;
+        // =====================================================
+        // APARTMENT BOOKING PAYMENT
+        // =====================================================
 
-        await order.save();
+        if (bookingId) {
+            const booking = await Booking.findOne({
+                _id: bookingId,
+                user: req.user._id
+            }).populate("user", "email");
 
-        return res.status(200).json({
-            success: true,
-            message: "Payment initialized successfully",
+            if (!booking) {
+                return res.status(404).json({
+                    success: false,
+                    message: "Booking not found"
+                });
+            }
 
-            authorizationUrl:
-                response.data.data.authorization_url,
+            if (booking.paymentStatus === "paid") {
+                return res.status(400).json({
+                    success: false,
+                    message:
+                        "Booking has already been paid for"
+                });
+            }
 
-            accessCode:
-                response.data.data.access_code,
+            if (!booking.user?.email) {
+                return res.status(400).json({
+                    success: false,
+                    message:
+                        "User email is required for payment"
+                });
+            }
 
-            reference:
-                response.data.data.reference
-        });
+            // Generate a unique booking payment reference
+            const paymentReference =
+                `BOOK-${booking._id}-${Date.now()}`;
+
+            const response = await axios.post(
+                "https://api.paystack.co/transaction/initialize",
+                {
+                    email: booking.user.email,
+
+                    amount: Math.round(
+                        booking.totalAmount * 100
+                    ),
+
+                    reference: paymentReference,
+
+                    callback_url:
+                        `${process.env.FRONTEND_URL}/booking-success`,
+
+                    metadata: {
+                        type: "booking",
+                        bookingId:
+                            booking._id.toString(),
+
+                        userId:
+                            req.user._id.toString()
+                    }
+                },
+                {
+                    headers: {
+                        Authorization:
+                            `Bearer ${process.env.PAYSTACK_SECRET_KEY}`,
+
+                        "Content-Type":
+                            "application/json"
+                    }
+                }
+            );
+
+            if (!response.data.status) {
+                return res.status(400).json({
+                    success: false,
+                    message: "Unable to initialize payment"
+                });
+            }
+
+            // Save Paystack reference to booking
+            booking.paymentReference =
+                response.data.data.reference;
+
+            await booking.save();
+
+            return res.status(200).json({
+                success: true,
+                message:
+                    "Booking payment initialized successfully",
+
+                authorizationUrl:
+                    response.data.data.authorization_url,
+
+                accessCode:
+                    response.data.data.access_code,
+
+                reference:
+                    response.data.data.reference
+            });
+        }
 
     } catch (error) {
         console.error(
@@ -103,7 +316,9 @@ export const initializePayment = async (req, res) => {
         return res.status(500).json({
             success: false,
             message: "Failed to initialize payment",
-            error: error.response?.data?.message || error.message
+            error:
+                error.response?.data?.message ||
+                error.message
         });
     }
 };

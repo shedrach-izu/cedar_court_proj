@@ -1949,285 +1949,181 @@ export default function Checkout() {
       {/* ===================================================== */}
 
       {step === 3 && (
+  <section>
 
-        <section>
+    {/* PAGE HEADING */}
 
-          {/* PAGE HEADING */}
+    <div className="mb-6">
 
-          <div className="mb-6">
+      <p className="text-[10px] font-['DM_Mono'] uppercase tracking-[0.2em] text-[#c4954a] mb-2">
+        Step 03
+      </p>
 
-            <p className="text-[10px] font-['DM_Mono'] uppercase tracking-[0.2em] text-[#c4954a] mb-2">
-              Step 03
-            </p>
+      <h1 className="font-['Fraunces'] text-2xl sm:text-3xl text-[#ede4d4]">
+        Payment
+      </h1>
 
-            <h1 className="font-['Fraunces'] text-2xl sm:text-3xl text-[#ede4d4]">
-              Payment
-            </h1>
+      <p className="text-sm font-['Jost'] text-[#8a7d6a] mt-2">
+        {isBooking
+          ? "Complete your payment securely to confirm your reservation."
+          : "Complete your payment securely to confirm your order."}
+      </p>
 
-            <p className="text-sm font-['Jost'] text-[#8a7d6a] mt-2">
-              Complete your payment securely to confirm your order.
-            </p>
-
-          </div>
-
-
-          <form onSubmit={handlePay}>
-
-            {/* ================================================= */}
-            {/* 2/3 PAYSTACK + 1/3 ORDER SUMMARY */}
-            {/* ================================================= */}
-
-            <div className="grid grid-cols-1 lg:grid-cols-[2fr_1fr] gap-7 items-start">
+    </div>
 
 
-              {/* ================================================= */}
-              {/* PAYSTACK — 2/3 */}
-              {/* ================================================= */}
+    <form onSubmit={handlePay}>
 
-              <div>
+      {/* ================================================= */}
+      {/* PAYSTACK + SUMMARY */}
+      {/* ================================================= */}
 
-                {/* SECURE PAYMENT */}
+      <div className="grid grid-cols-1 lg:grid-cols-[2fr_1fr] gap-7 items-start">
 
-                <div className="border border-[#3b3226] bg-[#11110f]">
 
-                  {/* HEADER */}
+        {/* ================================================= */}
+        {/* PAYSTACK — 2/3 */}
+        {/* ================================================= */}
 
-                  <div className="px-5 py-4 border-b border-[#2d2923]">
+        <div>
 
-                    <div className="flex items-center gap-3">
+          {/* SECURE PAYMENT */}
 
-                      <div className="w-8 h-8 rounded-full border border-[#c4954a] flex items-center justify-center">
+          <div className="border border-[#3b3226] bg-[#11110f]">
 
-                        <ShieldCheck
-                          size={17}
-                          className="text-[#c4954a]"
-                        />
+            {/* HEADER */}
+
+            <div className="px-5 py-4 border-b border-[#2d2923]">
+
+              <div className="flex items-center gap-3">
+
+                <div className="w-8 h-8 rounded-full border border-[#c4954a] flex items-center justify-center">
+
+                  <ShieldCheck
+                    size={17}
+                    className="text-[#c4954a]"
+                  />
+
+                </div>
+
+                <div>
+
+                  <h2 className="font-['Fraunces'] text-lg text-[#ede4d4]">
+                    Secure Payment
+                  </h2>
+
+                  <p className="text-[10px] font-['DM_Mono'] text-[#8a7d6a] mt-0.5">
+                    256-BIT SSL SECURED PAYMENT
+                  </p>
+
+                </div>
+
+              </div>
+
+            </div>
+
+
+            {/* PAYMENT CONTENT */}
+
+            <div className="p-6">
+
+              {/* PAYSTACK */}
+
+              <div className="border border-[#2d2923] bg-[#0c0a08] px-6 py-8">
+
+                <div className="flex flex-col sm:flex-row items-center justify-between gap-6">
+
+                  <div>
+
+                    <p className="text-[10px] font-['DM_Mono'] uppercase tracking-[0.16em] text-[#c4954a] mb-3">
+                      Payment Provider
+                    </p>
+
+                    <div className="flex items-center gap-2">
+
+                      <div className="flex flex-col gap-[3px]">
+
+                        <span className="block w-6 h-[5px] rounded-sm bg-[#00c3f7]" />
+                        <span className="block w-6 h-[5px] rounded-sm bg-[#00c3f7]" />
+                        <span className="block w-6 h-[5px] rounded-sm bg-[#00c3f7]" />
 
                       </div>
 
-                      <div>
-
-                        <h2 className="font-['Fraunces'] text-lg text-[#ede4d4]">
-                          Secure Payment
-                        </h2>
-
-                        <p className="text-[10px] font-['DM_Mono'] text-[#8a7d6a] mt-0.5">
-                          256-BIT SSL SECURED PAYMENT
-                        </p>
-
-                      </div>
+                      <span className="text-3xl font-bold tracking-tight text-white">
+                        paystack
+                      </span>
 
                     </div>
 
                   </div>
 
 
-                  {/* PAYMENT CONTENT */}
-
-                  <div className="p-6">
-
-
-                    {/* PAYSTACK */}
-
-                    <div className="border border-[#2d2923] bg-[#0c0a08] px-6 py-8">
-
-                      <div className="flex flex-col sm:flex-row items-center justify-between gap-6">
-
-                        <div>
-
-                          <p className="text-[10px] font-['DM_Mono'] uppercase tracking-[0.16em] text-[#c4954a] mb-3">
-                            Payment Provider
-                          </p>
-
-                          <div className="flex items-center gap-2">
-
-                            <div className="flex flex-col gap-[3px]">
-
-                              <span className="block w-6 h-[5px] rounded-sm bg-[#00c3f7]" />
-                              <span className="block w-6 h-[5px] rounded-sm bg-[#00c3f7]" />
-                              <span className="block w-6 h-[5px] rounded-sm bg-[#00c3f7]" />
-
-                            </div>
-
-                            <span className="text-3xl font-bold tracking-tight text-white">
-                              paystack
-                            </span>
-
-                          </div>
-
-                        </div>
-
-
-                        <div className="max-w-sm">
-
-                          <p className="text-sm font-['Jost'] text-[#c8c0b4] leading-relaxed">
-                            You will be securely redirected to Paystack to complete your payment.
-                          </p>
-
-                        </div>
-
-                      </div>
-
-                    </div>
-
-
-                    {/* SECURITY FEATURES */}
-
-                    <div className="grid grid-cols-3 mt-6 border-t border-[#2d2923] pt-6">
-
-                      <div className="text-center px-3 border-r border-[#2d2923]">
-
-                        <ShieldCheck
-                          size={19}
-                          className="mx-auto text-[#c4954a] mb-2"
-                        />
-
-                        <p className="text-[10px] font-['Jost'] text-[#c8c0b4]">
-                          256-bit
-                        </p>
-
-                        <p className="text-[9px] font-['Jost'] text-[#8a7d6a]">
-                          SSL Encrypted
-                        </p>
-
-                      </div>
-
-
-                      <div className="text-center px-3 border-r border-[#2d2923]">
-
-                        <Lock
-                          size={19}
-                          className="mx-auto text-[#c4954a] mb-2"
-                        />
-
-                        <p className="text-[10px] font-['Jost'] text-[#c8c0b4]">
-                          Secure
-                        </p>
-
-                        <p className="text-[9px] font-['Jost'] text-[#8a7d6a]">
-                          Transactions
-                        </p>
-
-                      </div>
-
-
-                      <div className="text-center px-3">
-
-                        <ShieldCheck
-                          size={19}
-                          className="mx-auto text-[#c4954a] mb-2"
-                        />
-
-                        <p className="text-[10px] font-['Jost'] text-[#c8c0b4]">
-                          Trusted by
-                        </p>
-
-                        <p className="text-[9px] font-['Jost'] text-[#8a7d6a]">
-                          Millions
-                        </p>
-
-                      </div>
-
-                    </div>
-
-
-                    {/* PAYMENT METHODS */}
-
-                    <div className="mt-6 pt-6 border-t border-[#2d2923]">
-
-                      <p className="text-center text-[9px] font-['Jost'] text-[#8a7d6a] mb-3">
-                        Accepted Payment Methods
-                      </p>
-
-
-                      <div className="grid grid-cols-5 gap-2">
-
-
-                        {/* VISA */}
-
-                        <div className="h-11 border border-[#302b24] rounded-md flex items-center justify-center bg-[#151513]">
-
-                          <span className="text-base font-bold italic text-white">
-                            VISA
-                          </span>
-
-                        </div>
-
-
-                        {/* MASTERCARD */}
-
-                        <div className="h-11 border border-[#302b24] rounded-md flex items-center justify-center bg-[#151513]">
-
-                          <div className="relative flex items-center">
-
-                            <span className="w-5 h-5 rounded-full bg-red-500" />
-
-                            <span className="w-5 h-5 rounded-full bg-yellow-500 -ml-2 opacity-90" />
-
-                          </div>
-
-                        </div>
-
-
-                        {/* VERVE */}
-
-                        <div className="h-11 border border-[#302b24] rounded-md flex items-center justify-center bg-[#151513]">
-
-                          <span className="text-xs font-bold text-white">
-                            Verve
-                          </span>
-
-                        </div>
-
-
-                        {/* BANK */}
-
-                        <div className="h-11 border border-[#302b24] rounded-md flex items-center justify-center bg-[#151513]">
-
-                          <Landmark
-                            size={17}
-                            className="text-[#c8c0b4]"
-                          />
-
-                        </div>
-
-
-                        {/* TRANSFER */}
-
-                        <div className="h-11 border border-[#302b24] rounded-md flex items-center justify-center bg-[#151513]">
-
-                          <span className="text-[7px] font-['DM_Mono'] text-[#c8c0b4] text-center leading-tight">
-                            TRANSFER
-                            <br />
-                            USSD
-                          </span>
-
-                        </div>
-
-                      </div>
-
-                    </div>
+                  <div className="max-w-sm">
+
+                    <p className="text-sm font-['Jost'] text-[#c8c0b4] leading-relaxed">
+                      You will be securely redirected to Paystack to complete your payment.
+                    </p>
 
                   </div>
 
                 </div>
 
+              </div>
 
-                {/* SECURITY NOTICE */}
 
-                <div className="border border-[#3b3226] mt-5 px-5 py-4 flex gap-3 bg-[#11110f]">
+              {/* SECURITY FEATURES */}
 
-                  <Info
-                    size={17}
-                    className="text-[#c4954a] shrink-0 mt-0.5"
+              <div className="grid grid-cols-3 mt-6 border-t border-[#2d2923] pt-6">
+
+                <div className="text-center px-3 border-r border-[#2d2923]">
+
+                  <ShieldCheck
+                    size={19}
+                    className="mx-auto text-[#c4954a] mb-2"
                   />
 
-                  <p className="text-[11px] font-['Jost'] text-[#8a7d6a] leading-relaxed">
+                  <p className="text-[10px] font-['Jost'] text-[#c8c0b4]">
+                    256-bit
+                  </p>
 
-                    Cedar Court does not store your card details.
-                    <br />
-                    All payments are processed securely by Paystack.
+                  <p className="text-[9px] font-['Jost'] text-[#8a7d6a]">
+                    SSL Encrypted
+                  </p>
 
+                </div>
+
+
+                <div className="text-center px-3 border-r border-[#2d2923]">
+
+                  <Lock
+                    size={19}
+                    className="mx-auto text-[#c4954a] mb-2"
+                  />
+
+                  <p className="text-[10px] font-['Jost'] text-[#c8c0b4]">
+                    Secure
+                  </p>
+
+                  <p className="text-[9px] font-['Jost'] text-[#8a7d6a]">
+                    Transactions
+                  </p>
+
+                </div>
+
+
+                <div className="text-center px-3">
+
+                  <ShieldCheck
+                    size={19}
+                    className="mx-auto text-[#c4954a] mb-2"
+                  />
+
+                  <p className="text-[10px] font-['Jost'] text-[#c8c0b4]">
+                    Trusted by
+                  </p>
+
+                  <p className="text-[9px] font-['Jost'] text-[#8a7d6a]">
+                    Millions
                   </p>
 
                 </div>
@@ -2235,212 +2131,75 @@ export default function Checkout() {
               </div>
 
 
-              {/* ================================================= */}
-              {/* ORDER SUMMARY — 1/3 */}
-              {/* ================================================= */}
+              {/* PAYMENT METHODS */}
 
-              <div className="lg:sticky lg:top-28">
+              <div className="mt-6 pt-6 border-t border-[#2d2923]">
 
-                <div className="border border-[#3b3226] bg-[#11110f]">
+                <p className="text-center text-[9px] font-['Jost'] text-[#8a7d6a] mb-3">
+                  Accepted Payment Methods
+                </p>
 
-                  {/* HEADER */}
 
-                  <div className="px-5 py-4 border-b border-[#2d2923]">
+                <div className="grid grid-cols-5 gap-2">
 
-                    <h2 className="font-['Fraunces'] text-lg text-[#ede4d4]">
-                      Order Summary
-                    </h2>
+                  {/* VISA */}
+
+                  <div className="h-11 border border-[#302b24] rounded-md flex items-center justify-center bg-[#151513]">
+
+                    <span className="text-base font-bold italic text-white">
+                      VISA
+                    </span>
 
                   </div>
 
 
-                  <div className="px-5">
+                  {/* MASTERCARD */}
 
+                  <div className="h-11 border border-[#302b24] rounded-md flex items-center justify-center bg-[#151513]">
 
-                    {/* CART ITEMS */}
+                    <div className="relative flex items-center">
 
-                    <div>
+                      <span className="w-5 h-5 rounded-full bg-red-500" />
 
-                      {cartItems.map((item) => (
-
-                        <div
-                          key={item.id}
-                          className="flex items-center gap-3 py-4 border-b border-[#2d2923]"
-                        >
-
-                          <div className="w-12 h-12 rounded-md overflow-hidden bg-[#1a1815] shrink-0">
-
-                            {item.img ? (
-
-                              <img
-                                src={item.img}
-                                alt={item.name}
-                                className="w-full h-full object-cover"
-                              />
-
-                            ) : (
-
-                              <div className="w-full h-full flex items-center justify-center text-[9px] text-[#71675b]">
-                                No image
-                              </div>
-
-                            )}
-
-                          </div>
-
-
-                          <div className="flex-1 min-w-0">
-
-                            <p className="text-sm font-['Jost'] text-[#ede4d4] truncate">
-                              {item.name}
-                            </p>
-
-                            <p className="text-[11px] font-['DM_Mono'] text-[#8a7d6a] mt-1">
-                              ×{item.qty}
-                            </p>
-
-                          </div>
-
-
-                          <p className="text-sm font-['DM_Mono'] text-[#ede4d4] whitespace-nowrap">
-
-                            ₦{(
-                              item.price * item.qty
-                            ).toLocaleString()}
-
-                          </p>
-
-                        </div>
-
-                      ))}
+                      <span className="w-5 h-5 rounded-full bg-yellow-500 -ml-2 opacity-90" />
 
                     </div>
 
-
-                    {/* PRICING */}
-
-                    <div className="py-5 space-y-3">
-
-                      <div className="flex justify-between items-center">
-
-                        <span className="text-xs font-['Jost'] text-[#8a7d6a]">
-                          Subtotal
-                        </span>
-
-                        <span className="text-xs font-['DM_Mono'] text-[#c8c0b4]">
-                          ₦{subtotal.toLocaleString()}
-                        </span>
-
-                      </div>
+                  </div>
 
 
-                      <div className="flex justify-between items-center">
+                  {/* VERVE */}
 
-                        <span className="text-xs font-['Jost'] text-[#8a7d6a]">
-                          Service (10%)
-                        </span>
+                  <div className="h-11 border border-[#302b24] rounded-md flex items-center justify-center bg-[#151513]">
 
-                        <span className="text-xs font-['DM_Mono'] text-[#c8c0b4]">
-                          ₦{service.toLocaleString()}
-                        </span>
+                    <span className="text-xs font-bold text-white">
+                      Verve
+                    </span>
 
-                      </div>
-
-                    </div>
+                  </div>
 
 
-                    {/* TOTAL */}
+                  {/* BANK */}
 
-                    <div className="border-t border-[#3b3226] py-5">
+                  <div className="h-11 border border-[#302b24] rounded-md flex items-center justify-center bg-[#151513]">
 
-                      <div className="flex justify-between items-center">
+                    <Landmark
+                      size={17}
+                      className="text-[#c8c0b4]"
+                    />
 
-                        <span className="font-['Fraunces'] text-base text-[#ede4d4]">
-                          Total
-                        </span>
-
-                        <span className="text-xl font-['DM_Mono'] font-semibold text-[#c4954a]">
-                          ₦{total.toLocaleString()}
-                        </span>
-
-                      </div>
-
-                    </div>
+                  </div>
 
 
-                    {/* ================================================= */}
-                    {/* RESERVATION */}
-                    {/* ================================================= */}
+                  {/* TRANSFER */}
 
-                    <div className="border-t border-[#3b3226] py-5">
+                  <div className="h-11 border border-[#302b24] rounded-md flex items-center justify-center bg-[#151513]">
 
-                      <div className="flex items-center gap-3 mb-5">
-
-                        <div className="w-8 h-8 rounded-full border border-[#c4954a] flex items-center justify-center">
-
-                          <CalendarDays
-                            size={15}
-                            className="text-[#c4954a]"
-                          />
-
-                        </div>
-
-                        <h3 className="font-['Fraunces'] text-base text-[#ede4d4]">
-                          Reservation
-                        </h3>
-
-                      </div>
-
-
-                      <div className="space-y-4">
-
-                        {/* DATE */}
-
-                        <div className="flex justify-between items-center">
-
-                          <span className="text-xs font-['Jost'] text-[#8a7d6a]">
-                            Date
-                          </span>
-
-                          <span className="text-xs font-['DM_Mono'] text-[#c8c0b4]">
-                            {details.date}
-                          </span>
-
-                        </div>
-
-
-                        {/* TIME */}
-
-                        <div className="flex justify-between items-center">
-
-                          <span className="text-xs font-['Jost'] text-[#8a7d6a]">
-                            Time
-                          </span>
-
-                          <span className="text-xs font-['DM_Mono'] text-[#c8c0b4]">
-                            {details.time}
-                          </span>
-
-                        </div>
-
-
-                        {/* GUESTS */}
-
-                        <div className="flex justify-between items-center">
-
-                          <span className="text-xs font-['Jost'] text-[#8a7d6a]">
-                            Guests
-                          </span>
-
-                          <span className="text-xs font-['DM_Mono'] text-[#c8c0b4]">
-                            {details.guests}
-                          </span>
-
-                        </div>
-
-                      </div>
-
-                    </div>
+                    <span className="text-[7px] font-['DM_Mono'] text-[#c8c0b4] text-center leading-tight">
+                      TRANSFER
+                      <br />
+                      USSD
+                    </span>
 
                   </div>
 
@@ -2450,115 +2209,553 @@ export default function Checkout() {
 
             </div>
 
-
-            {/* ================================================= */}
-            {/* TERMS */}
-            {/* ================================================= */}
-
-            <label className="flex items-start gap-3 cursor-pointer pt-6">
-
-              <input
-                type="checkbox"
-                checked={agreed}
-                onChange={(e) =>
-                  setAgreed(e.target.checked)
-                }
-                className="mt-1 accent-[#c4954a]"
-              />
+          </div>
 
 
-              <span className="text-xs font-['Jost'] text-[#8a7d6a] leading-relaxed">
+          {/* SECURITY NOTICE */}
 
-                I agree to the Cedar Court{" "}
+          <div className="border border-[#3b3226] mt-5 px-5 py-4 flex gap-3 bg-[#11110f]">
 
-                <button
-                  type="button"
-                  className="text-[#c4954a] hover:underline"
-                >
-                  Terms & Conditions
-                </button>{" "}
+            <Info
+              size={17}
+              className="text-[#c4954a] shrink-0 mt-0.5"
+            />
 
-                and{" "}
+            <p className="text-[11px] font-['Jost'] text-[#8a7d6a] leading-relaxed">
 
-                <button
-                  type="button"
-                  className="text-[#c4954a] hover:underline"
-                >
-                  Privacy Policy
-                </button>
+              Cedar Court does not store your card details.
+              <br />
 
-                .
+              All payments are processed securely by Paystack.
 
-              </span>
+            </p>
 
-            </label>
+          </div>
+
+        </div>
 
 
-            {/* ================================================= */}
-            {/* BUTTONS */}
-            {/* ================================================= */}
+        {/* ================================================= */}
+        {/* SUMMARY — 1/3 */}
+        {/* ================================================= */}
 
-            <div className="flex flex-col sm:flex-row gap-3 pt-5">
+        <div className="lg:sticky lg:top-28">
 
-              <button
-                type="button"
-                onClick={() => setStep(2)}
-                disabled={processing}
-                className={`${BTN_OUTLINE} flex-1 py-4`}
-              >
+          <div className="border border-[#3b3226] bg-[#11110f]">
 
-                <ChevronLeft
-                  size={14}
-                  className="mr-2"
-                />
+            {/* HEADER */}
 
-                Back
+            <div className="px-5 py-4 border-b border-[#2d2923]">
 
-              </button>
-
-
-              <button
-                type="submit"
-                disabled={processing || !agreed}
-                className={`${BTN_PRIMARY} flex-1 py-4`}
-              >
-
-                {processing
-                  ? "Processing..."
-                  : `PAY ₦${total.toLocaleString()}`}
-
-                <ArrowRight
-                  size={15}
-                  className="ml-2"
-                />
-
-              </button>
+              <h2 className="font-['Fraunces'] text-lg text-[#ede4d4]">
+                {isBooking
+                  ? "Booking Summary"
+                  : "Order Summary"}
+              </h2>
 
             </div>
 
 
-            {/* ================================================= */}
-            {/* BOTTOM SECURITY */}
-            {/* ================================================= */}
+            <div className="px-5">
 
-            <div className="mt-5 py-4 flex items-center justify-center gap-2 border-t border-[#25221e]">
 
-              <Lock
-                size={13}
-                className="text-[#c4954a]"
-              />
+              {/* ================================================= */}
+              {/* RESTAURANT ITEMS */}
+              {/* ================================================= */}
 
-              <p className="text-[10px] font-['Jost'] text-[#71675b]">
-                Your payment is 100% secure. We never store your card information.
-              </p>
+              {!isBooking && (
+
+                <div>
+
+                  {cartItems.map((item) => (
+
+                    <div
+                      key={item.id}
+                      className="flex items-center gap-3 py-4 border-b border-[#2d2923]"
+                    >
+
+                      <div className="w-12 h-12 rounded-md overflow-hidden bg-[#1a1815] shrink-0">
+
+                        {item.img ? (
+
+                          <img
+                            src={item.img}
+                            alt={item.name}
+                            className="w-full h-full object-cover"
+                          />
+
+                        ) : (
+
+                          <div className="w-full h-full flex items-center justify-center text-[9px] text-[#71675b]">
+                            No image
+                          </div>
+
+                        )}
+
+                      </div>
+
+
+                      <div className="flex-1 min-w-0">
+
+                        <p className="text-sm font-['Jost'] text-[#ede4d4] truncate">
+                          {item.name}
+                        </p>
+
+                        <p className="text-[11px] font-['DM_Mono'] text-[#8a7d6a] mt-1">
+                          ×{item.qty}
+                        </p>
+
+                      </div>
+
+
+                      <p className="text-sm font-['DM_Mono'] text-[#ede4d4] whitespace-nowrap">
+
+                        ₦{(
+                          item.price * item.qty
+                        ).toLocaleString()}
+
+                      </p>
+
+                    </div>
+
+                  ))}
+
+                </div>
+
+              )}
+
+
+              {/* ================================================= */}
+              {/* BOOKING DETAILS */}
+              {/* ================================================= */}
+
+              {isBooking && (
+
+                <div className="py-5 border-b border-[#2d2923]">
+
+                  <div className="flex items-start gap-4">
+
+                    <div className="w-14 h-14 rounded-md overflow-hidden bg-[#1a1815] shrink-0">
+
+                      {apartment?.gallery?.[0]?.url ? (
+
+                        <img
+                          src={apartment.gallery[0].url}
+                          alt={apartment.title}
+                          className="w-full h-full object-cover"
+                        />
+
+                      ) : (
+
+                        <div className="w-full h-full flex items-center justify-center text-[9px] text-[#71675b]">
+                          No image
+                        </div>
+
+                      )}
+
+                    </div>
+
+
+                    <div className="min-w-0">
+
+                      <p className="text-[9px] font-['DM_Mono'] uppercase tracking-wider text-[#c4954a]">
+                        Apartment
+                      </p>
+
+                      <p className="text-sm font-['Fraunces'] text-[#ede4d4] mt-1">
+                        {apartment?.title || "Apartment"}
+                      </p>
+
+                      <p className="text-[10px] font-['Jost'] text-[#8a7d6a] mt-1">
+                        ₦{apartment?.price?.toLocaleString() || "0"} / night
+                      </p>
+
+                    </div>
+
+                  </div>
+
+                </div>
+
+              )}
+
+
+              {/* ================================================= */}
+              {/* PRICING */}
+              {/* ================================================= */}
+
+              <div className="py-5 space-y-3">
+
+                {/* SUBTOTAL */}
+
+                <div className="flex justify-between items-center">
+
+                  <span className="text-xs font-['Jost'] text-[#8a7d6a]">
+                    Subtotal
+                  </span>
+
+                  <span className="text-xs font-['DM_Mono'] text-[#c8c0b4]">
+
+                    ₦
+                    {(
+                      isBooking
+                        ? bookingSubtotal
+                        : subtotal
+                    ).toLocaleString()}
+
+                  </span>
+
+                </div>
+
+
+                {/* SERVICE */}
+
+                <div className="flex justify-between items-center">
+
+                  <span className="text-xs font-['Jost'] text-[#8a7d6a]">
+                    Service (10%)
+                  </span>
+
+                  <span className="text-xs font-['DM_Mono'] text-[#c8c0b4]">
+
+                    ₦
+                    {(
+                      isBooking
+                        ? bookingService
+                        : service
+                    ).toLocaleString()}
+
+                  </span>
+
+                </div>
+
+
+                {/* TAX — BOOKING ONLY */}
+
+                {isBooking && (
+
+                  <div className="flex justify-between items-center">
+
+                    <span className="text-xs font-['Jost'] text-[#8a7d6a]">
+                      Tax (12%)
+                    </span>
+
+                    <span className="text-xs font-['DM_Mono'] text-[#c8c0b4]">
+                      ₦{bookingTax.toLocaleString()}
+                    </span>
+
+                  </div>
+
+                )}
+
+              </div>
+
+
+              {/* TOTAL */}
+
+              <div className="border-t border-[#3b3226] py-5">
+
+                <div className="flex justify-between items-center">
+
+                  <span className="font-['Fraunces'] text-base text-[#ede4d4]">
+                    Total
+                  </span>
+
+                  <span className="text-xl font-['DM_Mono'] font-semibold text-[#c4954a]">
+
+                    ₦
+                    {(
+                      isBooking
+                        ? bookingTotal
+                        : total
+                    ).toLocaleString()}
+
+                  </span>
+
+                </div>
+
+              </div>
+
+
+              {/* ================================================= */}
+              {/* RESERVATION / STAY DETAILS */}
+              {/* ================================================= */}
+
+              <div className="border-t border-[#3b3226] py-5">
+
+                <div className="flex items-center gap-3 mb-5">
+
+                  <div className="w-8 h-8 rounded-full border border-[#c4954a] flex items-center justify-center">
+
+                    <CalendarDays
+                      size={15}
+                      className="text-[#c4954a]"
+                    />
+
+                  </div>
+
+                  <h3 className="font-['Fraunces'] text-base text-[#ede4d4]">
+
+                    {isBooking
+                      ? "Stay Details"
+                      : "Reservation"}
+
+                  </h3>
+
+                </div>
+
+
+                <div className="space-y-4">
+
+
+                  {/* ================================================= */}
+                  {/* BOOKING DETAILS */}
+                  {/* ================================================= */}
+
+                  {isBooking ? (
+
+                    <>
+
+                      {/* CHECK-IN */}
+
+                      <div className="flex justify-between items-center">
+
+                        <span className="text-xs font-['Jost'] text-[#8a7d6a]">
+                          Check-in
+                        </span>
+
+                        <span className="text-xs font-['DM_Mono'] text-[#c8c0b4]">
+                          {bookingCheckIn || "-"}
+                        </span>
+
+                      </div>
+
+
+                      {/* CHECK-OUT */}
+
+                      <div className="flex justify-between items-center">
+
+                        <span className="text-xs font-['Jost'] text-[#8a7d6a]">
+                          Check-out
+                        </span>
+
+                        <span className="text-xs font-['DM_Mono'] text-[#c8c0b4]">
+                          {bookingCheckOut || "-"}
+                        </span>
+
+                      </div>
+
+
+                      {/* NIGHTS */}
+
+                      <div className="flex justify-between items-center">
+
+                        <span className="text-xs font-['Jost'] text-[#8a7d6a]">
+                          Nights
+                        </span>
+
+                        <span className="text-xs font-['DM_Mono'] text-[#c8c0b4]">
+                          {bookingNights}
+                        </span>
+
+                      </div>
+
+
+                      {/* GUESTS */}
+
+                      <div className="flex justify-between items-center">
+
+                        <span className="text-xs font-['Jost'] text-[#8a7d6a]">
+                          Guests
+                        </span>
+
+                        <span className="text-xs font-['DM_Mono'] text-[#c8c0b4]">
+                          {bookingGuests || "-"}
+                        </span>
+
+                      </div>
+
+                    </>
+
+                  ) : (
+
+                    /* ================================================= */
+                    /* RESTAURANT DETAILS */
+                    /* ================================================= */
+
+                    <>
+
+                      {/* DATE */}
+
+                      <div className="flex justify-between items-center">
+
+                        <span className="text-xs font-['Jost'] text-[#8a7d6a]">
+                          Date
+                        </span>
+
+                        <span className="text-xs font-['DM_Mono'] text-[#c8c0b4]">
+                          {details.date}
+                        </span>
+
+                      </div>
+
+
+                      {/* TIME */}
+
+                      <div className="flex justify-between items-center">
+
+                        <span className="text-xs font-['Jost'] text-[#8a7d6a]">
+                          Time
+                        </span>
+
+                        <span className="text-xs font-['DM_Mono'] text-[#c8c0b4]">
+                          {details.time}
+                        </span>
+
+                      </div>
+
+
+                      {/* GUESTS */}
+
+                      <div className="flex justify-between items-center">
+
+                        <span className="text-xs font-['Jost'] text-[#8a7d6a]">
+                          Guests
+                        </span>
+
+                        <span className="text-xs font-['DM_Mono'] text-[#c8c0b4]">
+                          {details.guests}
+                        </span>
+
+                      </div>
+
+                    </>
+
+                  )}
+
+                </div>
+
+              </div>
 
             </div>
 
-          </form>
+          </div>
 
-        </section>
+        </div>
 
-      )}
+      </div>
+
+
+      {/* ================================================= */}
+      {/* TERMS */}
+      {/* ================================================= */}
+
+      <label className="flex items-start gap-3 cursor-pointer pt-6">
+
+        <input
+          type="checkbox"
+          checked={agreed}
+          onChange={(e) =>
+            setAgreed(e.target.checked)
+          }
+          className="mt-1 accent-[#c4954a]"
+        />
+
+
+        <span className="text-xs font-['Jost'] text-[#8a7d6a] leading-relaxed">
+
+          I agree to the Cedar Court{" "}
+
+          <button
+            type="button"
+            className="text-[#c4954a] hover:underline"
+          >
+            Terms & Conditions
+          </button>{" "}
+
+          and{" "}
+
+          <button
+            type="button"
+            className="text-[#c4954a] hover:underline"
+          >
+            Privacy Policy
+          </button>
+
+          .
+
+        </span>
+
+      </label>
+
+
+      {/* ================================================= */}
+      {/* BUTTONS */}
+      {/* ================================================= */}
+
+      <div className="flex flex-col sm:flex-row gap-3 pt-5">
+
+        <button
+          type="button"
+          onClick={() => setStep(2)}
+          disabled={processing}
+          className={`${BTN_OUTLINE} flex-1 py-4`}
+        >
+
+          <ChevronLeft
+            size={14}
+            className="mr-2"
+          />
+
+          Back
+
+        </button>
+
+
+        <button
+          type="submit"
+          disabled={processing || !agreed}
+          className={`${BTN_PRIMARY} flex-1 py-4`}
+        >
+
+          {processing
+            ? "Processing..."
+            : `PAY ₦${(
+                isBooking
+                  ? bookingTotal
+                  : total
+              ).toLocaleString()}`}
+
+          <ArrowRight
+            size={15}
+            className="ml-2"
+          />
+
+        </button>
+
+      </div>
+
+
+      {/* ================================================= */}
+      {/* BOTTOM SECURITY */}
+      {/* ================================================= */}
+
+      <div className="mt-5 py-4 flex items-center justify-center gap-2 border-t border-[#25221e]">
+
+        <Lock
+          size={13}
+          className="text-[#c4954a]"
+        />
+
+        <p className="text-[10px] font-['Jost'] text-[#71675b]">
+          Your payment is 100% secure. We never store your card information.
+        </p>
+
+      </div>
+
+    </form>
+
+  </section>
+)}
 
     </main>
 

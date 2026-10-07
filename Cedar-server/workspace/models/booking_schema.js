@@ -86,6 +86,10 @@ const bookingSchema = new mongoose.Schema(
       ],
       default: "unpaid",
     },
+    paymentReference: {
+      type: String,
+      default: null,
+    },
   },
   {
     timestamps: true,
