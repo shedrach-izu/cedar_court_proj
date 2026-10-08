@@ -20,7 +20,7 @@ export default function OrderSuccessPage() {
     const [error, setError] = useState("");
 
     useEffect(() => {
-        const fetchOrder = async () => {
+        const verifyAndFetchOrder = async () => {
             if (!reference) {
                 setError("Order reference is missing.");
                 setLoading(false);
@@ -28,31 +28,86 @@ export default function OrderSuccessPage() {
             }
 
             try {
-                const response = await api.get(
+                // =========================
+                // 1. VERIFY PAYSTACK PAYMENT
+                // =========================
+
+                const paymentResponse = await api.get(
+                    `/payment/verify/${reference}`
+                );
+
+                console.log(
+                    "PAYMENT VERIFIED:",
+                    paymentResponse.data
+                );
+
+                // =========================
+                // 2. FETCH UPDATED ORDER
+                // =========================
+
+                const orderResponse = await api.get(
                     `/order/reference/${reference}`
                 );
 
-                console.log("REAL ORDER:", response.data.order);
+                console.log(
+                    "REAL ORDER:",
+                    orderResponse.data.order
+                );
 
-                setOrder(response.data.order);
+                setOrder(orderResponse.data.order);
 
             } catch (error: any) {
                 console.error(
-                    "Error fetching order:",
+                    "Payment/order error:",
                     error.response?.data || error.message
                 );
 
                 setError(
                     error.response?.data?.message ||
-                    "Unable to load your order."
+                    "Unable to verify your payment."
                 );
             } finally {
                 setLoading(false);
             }
         };
 
-        fetchOrder();
+        verifyAndFetchOrder();
     }, [reference]);
+
+    // useEffect(() => {
+    //     const fetchOrder = async () => {
+    //         if (!reference) {
+    //             setError("Order reference is missing.");
+    //             setLoading(false);
+    //             return;
+    //         }
+
+    //         try {
+    //             const response = await api.get(
+    //                 `/order/reference/${reference}`
+    //             );
+
+    //             console.log("REAL ORDER:", response.data.order);
+
+    //             setOrder(response.data.order);
+
+    //         } catch (error: any) {
+    //             console.error(
+    //                 "Error fetching order:",
+    //                 error.response?.data || error.message
+    //             );
+
+    //             setError(
+    //                 error.response?.data?.message ||
+    //                 "Unable to load your order."
+    //             );
+    //         } finally {
+    //             setLoading(false);
+    //         }
+    //     };
+
+    //     fetchOrder();
+    // }, [reference]);
 
     // =========================
     // LOADING

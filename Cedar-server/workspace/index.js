@@ -18,6 +18,7 @@ import orderRouter from "./routers/order_route.js";
 import paymentRouter from "./routers/payment_route.js";
 import reviewRouter from "./routers/review_route.js";
 import bookingRouter from "./routers/booking_route.js";
+import adminRouter from "./routers/admin_route.js";
 
 
 dotenv.config();
@@ -56,6 +57,7 @@ app.use("/api/order", orderRouter);
 app.use("/api/payment", paymentRouter);
 app.use("/api/review", reviewRouter);
 app.use("/api/booking", bookingRouter);
+app.use("/api/admin", adminRouter);
 
 
 const startServer = async () => {

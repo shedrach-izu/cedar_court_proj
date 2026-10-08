@@ -12,7 +12,7 @@ import bcrypt from "bcryptjs";
 
 export const registerUser = async (req, res) => {
     try {
-        const { name, email, password, role } = req.body;
+        const { name, email, password } = req.body;
 
         if(!name || !email || !password){
             return res.status(400).json({ message: "Name, email and password are required" })
@@ -37,7 +37,6 @@ export const registerUser = async (req, res) => {
             name: name.trim(),
             email: email.trim(),
             password: hashedPassword,
-            role: role || "user"
         });
 
         const token = jwt.sign(
@@ -125,6 +124,8 @@ export const loginUser = async (req, res) => {
         res.status(500).json({ message: error.message })
     }
 }
+
+
 
 
 

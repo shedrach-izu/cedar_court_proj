@@ -1,3 +1,1422 @@
+// "use client";
+
+// import { useState } from "react";
+// import {
+//   Plus,
+//   Trash2,
+//   Image as ImageIcon,
+//   BedDouble,
+//   Users,
+//   Maximize2,
+//   Eye,
+//   X,
+//   Search,
+// } from "lucide-react";
+// import { toast } from "react-hot-toast";
+
+// /* =========================================================
+//    TYPES
+// ========================================================= */
+
+// type ApartmentStatus = "Available" | "Occupied" | "Maintenance";
+
+// type ApartmentSection = {
+//   name: string;
+//   image: string;
+//   desc: string;
+// };
+
+// type Apartment = {
+//   id: number;
+//   title: string;
+//   type: string;
+//   price: number;
+//   area: string;
+//   guests: number;
+//   view: string;
+//   status: ApartmentStatus;
+//   image: string;
+//   description: string;
+//   amenities: string[];
+//   rating: number;
+//   reviews: number;
+//   sections: ApartmentSection[];
+// };
+
+// /* =========================================================
+//    DEFAULT SECTIONS
+// ========================================================= */
+
+// const createEmptySections = (): ApartmentSection[] => [
+//   {
+//     name: "Sitting Room",
+//     image: "",
+//     desc: "",
+//   },
+//   {
+//     name: "Master Bedroom",
+//     image: "",
+//     desc: "",
+//   },
+//   {
+//     name: "Bedroom 2",
+//     image: "",
+//     desc: "",
+//   },
+//   {
+//     name: "Bedroom 3",
+//     image: "",
+//     desc: "",
+//   },
+//   {
+//     name: "Kitchen",
+//     image: "",
+//     desc: "",
+//   },
+//   {
+//     name: "Balcony",
+//     image: "",
+//     desc: "",
+//   },
+// ];
+
+// /* =========================================================
+//    MOCK APARTMENTS
+// ========================================================= */
+
+// const INITIAL_APARTMENTS: Apartment[] = [
+//   {
+//     id: 1,
+//     title: "Presidential Suite",
+//     type: "Signature",
+//     price: 850000,
+//     area: "120 m²",
+//     guests: 3,
+//     view: "City View",
+//     status: "Available",
+//     image:
+//       "https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?auto=format&fit=crop&w=1200&q=80",
+//     description:
+//       "An expansive luxury suite designed for guests who appreciate refined comfort, privacy and exceptional city views.",
+//     amenities: [
+//       "WiFi",
+//       "Air Conditioning",
+//       "King Bed",
+//       "Kitchen",
+//       "Smart TV",
+//       "Balcony",
+//     ],
+//     rating: 4.9,
+//     reviews: 18,
+//     sections: [
+//       {
+//         name: "Sitting Room",
+//         image:
+//           "https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?auto=format&fit=crop&w=1200&q=80",
+//         desc: "Elegant living space with premium furnishings.",
+//       },
+//       {
+//         name: "Master Bedroom",
+//         image:
+//           "https://images.unsplash.com/photo-1616486338812-3dadae4b4ace?auto=format&fit=crop&w=1200&q=80",
+//         desc: "Spacious bedroom with a king-size bed.",
+//       },
+//       {
+//         name: "Bedroom 2",
+//         image:
+//           "https://images.unsplash.com/photo-1615874694520-474822394e73?auto=format&fit=crop&w=1200&q=80",
+//         desc: "Comfortable guest bedroom.",
+//       },
+//       {
+//         name: "Bedroom 3",
+//         image:
+//           "https://images.unsplash.com/photo-1595526114035-0d45ed16cfbf?auto=format&fit=crop&w=1200&q=80",
+//         desc: "Quiet bedroom suitable for additional guests.",
+//       },
+//       {
+//         name: "Kitchen",
+//         image:
+//           "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=1200&q=80",
+//         desc: "Fully equipped modern kitchen.",
+//       },
+//       {
+//         name: "Balcony",
+//         image:
+//           "https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?auto=format&fit=crop&w=1200&q=80",
+//         desc: "Private balcony overlooking the city.",
+//       },
+//     ],
+//   },
+//   {
+//     id: 2,
+//     title: "Executive Suite",
+//     type: "Executive",
+//     price: 550000,
+//     area: "85 m²",
+//     guests: 2,
+//     view: "Pool View",
+//     status: "Occupied",
+//     image:
+//       "https://images.unsplash.com/photo-1600566753190-17f0baa2a6c3?auto=format&fit=crop&w=1200&q=80",
+//     description:
+//       "A sophisticated executive apartment combining contemporary design with a peaceful pool-facing setting.",
+//     amenities: [
+//       "WiFi",
+//       "Air Conditioning",
+//       "Queen Bed",
+//       "Kitchen",
+//       "Smart TV",
+//     ],
+//     rating: 4.7,
+//     reviews: 12,
+//     sections: createEmptySections(),
+//   },
+//   {
+//     id: 3,
+//     title: "Deluxe Apartment",
+//     type: "Premier",
+//     price: 400000,
+//     area: "72 m²",
+//     guests: 3,
+//     view: "Garden View",
+//     status: "Available",
+//     image:
+//       "https://images.unsplash.com/photo-1600585154526-990dced4db0d?auto=format&fit=crop&w=1200&q=80",
+//     description:
+//       "A warm and comfortable apartment offering generous living space and tranquil garden views.",
+//     amenities: [
+//       "WiFi",
+//       "Air Conditioning",
+//       "King Bed",
+//       "Kitchen",
+//     ],
+//     rating: 4.6,
+//     reviews: 9,
+//     sections: createEmptySections(),
+//   },
+//   {
+//     id: 4,
+//     title: "Classic Studio",
+//     type: "Classic",
+//     price: 250000,
+//     area: "48 m²",
+//     guests: 2,
+//     view: "Garden View",
+//     status: "Maintenance",
+//     image:
+//       "https://images.unsplash.com/photo-1617104678098-de229db51175?auto=format&fit=crop&w=1200&q=80",
+//     description:
+//       "A stylish compact studio designed for comfortable short and extended stays.",
+//     amenities: [
+//       "WiFi",
+//       "Air Conditioning",
+//       "Queen Bed",
+//       "Smart TV",
+//     ],
+//     rating: 4.5,
+//     reviews: 7,
+//     sections: createEmptySections(),
+//   },
+// ];
+
+// /* =========================================================
+//    STATUS BADGE
+// ========================================================= */
+
+// function RoomStatusBadge({
+//   status,
+// }: {
+//   status: ApartmentStatus;
+// }) {
+//   const styles: Record<ApartmentStatus, string> = {
+//     Available:
+//       "text-emerald-400 bg-emerald-400/10 border-emerald-400/20",
+//     Occupied:
+//       "text-blue-400 bg-blue-400/10 border-blue-400/20",
+//     Maintenance:
+//       "text-amber-400 bg-amber-400/10 border-amber-400/20",
+//   };
+
+//   return (
+//     <span
+//       className={`
+//         inline-flex
+//         px-2
+//         py-1
+//         border
+//         text-[8px]
+//         font-['DM_Mono']
+//         uppercase
+//         tracking-widest
+//         whitespace-nowrap
+//         ${styles[status]}
+//       `}
+//     >
+//       {status}
+//     </span>
+//   );
+// }
+
+// /* =========================================================
+//    FORM FIELD
+// ========================================================= */
+
+// function FormField({
+//   label,
+//   children,
+// }: {
+//   label: string;
+//   children: React.ReactNode;
+// }) {
+//   return (
+//     <div>
+//       <label className="block text-[9px] font-['DM_Mono'] text-[#8a7d6a] uppercase tracking-widest mb-2">
+//         {label}
+//       </label>
+
+//       {children}
+//     </div>
+//   );
+// }
+
+// /* =========================================================
+//    INPUT STYLE
+// ========================================================= */
+
+// const INPUT = `
+//   w-full
+//   bg-[#0c0a08]
+//   border
+//   border-[rgba(196,149,74,0.12)]
+//   text-[#ede4d4]
+//   placeholder:text-[#8a7d6a]/50
+//   px-3
+//   py-2.5
+//   text-sm
+//   font-['Jost']
+//   outline-none
+//   focus:border-[rgba(196,149,74,0.45)]
+//   transition-colors
+// `;
+
+// /* =========================================================
+//    APARTMENT DETAILS MODAL
+// ========================================================= */
+
+// function ApartmentDetailsModal({
+//   apartment,
+//   onClose,
+// }: {
+//   apartment: Apartment;
+//   onClose: () => void;
+// }) {
+//   return (
+//     <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+
+//       {/* Overlay */}
+//       <div
+//         className="absolute inset-0 bg-black/75 backdrop-blur-sm"
+//         onClick={onClose}
+//       />
+
+//       {/* Modal */}
+//       <div className="relative w-full max-w-3xl max-h-[90vh] overflow-y-auto bg-[#161310] border border-[rgba(196,149,74,0.18)]">
+
+//         {/* Header */}
+//         <div className="sticky top-0 z-10 bg-[#161310] border-b border-[rgba(196,149,74,0.1)] px-5 sm:px-6 py-4 flex items-center justify-between">
+
+//           <div>
+//             <p className="text-[9px] font-['DM_Mono'] text-[#c4954a] uppercase tracking-[0.2em] mb-1">
+//               Apartment Details
+//             </p>
+
+//             <h2 className="font-['Fraunces'] text-xl text-[#ede4d4]">
+//               {apartment.title}
+//             </h2>
+//           </div>
+
+//           <button
+//             type="button"
+//             onClick={onClose}
+//             className="w-8 h-8 flex items-center justify-center text-[#8a7d6a] hover:text-[#ede4d4] hover:bg-white/5"
+//           >
+//             <X size={17} />
+//           </button>
+//         </div>
+
+//         <div className="p-5 sm:p-6 space-y-6">
+
+//           {/* Main Image */}
+//           <div className="relative">
+
+//             <img
+//               src={apartment.image}
+//               alt={apartment.title}
+//               className="w-full h-64 object-cover"
+//             />
+
+//             <div className="absolute top-3 right-3">
+//               <RoomStatusBadge status={apartment.status} />
+//             </div>
+
+//           </div>
+
+//           {/* Overview */}
+//           <div>
+
+//             <div className="flex items-center justify-between gap-4 mb-3">
+
+//               <div>
+//                 <p className="text-[9px] font-['DM_Mono'] text-[#8a7d6a] uppercase tracking-widest">
+//                   {apartment.type}
+//                 </p>
+
+//                 <h3 className="font-['Fraunces'] text-xl text-[#ede4d4] mt-1">
+//                   {apartment.title}
+//                 </h3>
+//               </div>
+
+//               <div className="text-right">
+//                 <p className="font-['Fraunces'] text-xl text-[#c4954a]">
+//                   ₦{apartment.price.toLocaleString()}
+//                 </p>
+
+//                 <p className="text-[8px] font-['DM_Mono'] text-[#8a7d6a] uppercase">
+//                   per night
+//                 </p>
+//               </div>
+
+//             </div>
+
+//             <p className="text-sm font-['Jost'] leading-relaxed text-[#8a7d6a]">
+//               {apartment.description}
+//             </p>
+
+//           </div>
+
+//           {/* Details */}
+//           <div className="grid grid-cols-3 gap-3">
+
+//             <DetailBox
+//               icon={<Maximize2 size={14} />}
+//               label="Area"
+//               value={apartment.area}
+//             />
+
+//             <DetailBox
+//               icon={<Users size={14} />}
+//               label="Guests"
+//               value={`${apartment.guests} Guests`}
+//             />
+
+//             <DetailBox
+//               icon={<Eye size={14} />}
+//               label="View"
+//               value={apartment.view}
+//             />
+
+//           </div>
+
+//           {/* Amenities */}
+//           <div>
+
+//             <p className="text-[9px] font-['DM_Mono'] text-[#8a7d6a] uppercase tracking-widest mb-3">
+//               Amenities
+//             </p>
+
+//             <div className="flex flex-wrap gap-2">
+
+//               {apartment.amenities.map((amenity) => (
+//                 <span
+//                   key={amenity}
+//                   className="px-2.5 py-1.5 border border-[rgba(196,149,74,0.1)] bg-[#0c0a08] text-[10px] font-['DM_Mono'] text-[#8a7d6a]"
+//                 >
+//                   {amenity}
+//                 </span>
+//               ))}
+
+//             </div>
+//           </div>
+
+//           {/* Gallery */}
+//           <div>
+
+//             <div className="flex items-center justify-between mb-3">
+
+//               <p className="text-[9px] font-['DM_Mono'] text-[#8a7d6a] uppercase tracking-widest">
+//                 Apartment Sections
+//               </p>
+
+//               <span className="text-[9px] font-['DM_Mono'] text-[#8a7d6a]">
+//                 {apartment.sections.filter((s) => s.image).length} images
+//               </span>
+
+//             </div>
+
+//             <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
+
+//               {apartment.sections.map((section, index) => (
+//                 section.image ? (
+//                   <div
+//                     key={`${section.name}-${index}`}
+//                     className="relative group"
+//                   >
+//                     <img
+//                       src={section.image}
+//                       alt={section.name}
+//                       className="w-full h-28 object-cover"
+//                     />
+
+//                     <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/80 to-transparent p-2">
+//                       <p className="text-[9px] font-['DM_Mono'] text-white uppercase tracking-wider">
+//                         {section.name}
+//                       </p>
+//                     </div>
+//                   </div>
+//                 ) : null
+//               ))}
+
+//             </div>
+//           </div>
+
+//         </div>
+//       </div>
+//     </div>
+//   );
+// }
+
+// /* =========================================================
+//    DETAIL BOX
+// ========================================================= */
+
+// function DetailBox({
+//   icon,
+//   label,
+//   value,
+// }: {
+//   icon: React.ReactNode;
+//   label: string;
+//   value: string;
+// }) {
+//   return (
+//     <div className="bg-[#0c0a08] border border-[rgba(196,149,74,0.08)] p-3">
+
+//       <div className="text-[#c4954a] mb-2">
+//         {icon}
+//       </div>
+
+//       <p className="text-[8px] font-['DM_Mono'] text-[#8a7d6a] uppercase tracking-widest">
+//         {label}
+//       </p>
+
+//       <p className="text-xs font-['Jost'] text-[#ede4d4] mt-1">
+//         {value}
+//       </p>
+
+//     </div>
+//   );
+// }
+
+// /* =========================================================
+//    MAIN PAGE
+// ========================================================= */
+
+// export default function AdminApartments() {
+
+//   const [apartments, setApartments] =
+//     useState<Apartment[]>(INITIAL_APARTMENTS);
+
+//   const [showForm, setShowForm] = useState(false);
+
+//   const [viewApartment, setViewApartment] =
+//     useState<Apartment | null>(null);
+
+//   const [search, setSearch] = useState("");
+
+//   const [form, setForm] = useState({
+//     title: "",
+//     type: "Classic",
+//     price: "",
+//     area: "",
+//     guests: 2,
+//     view: "",
+//     status: "Available" as ApartmentStatus,
+//     image: "",
+//     description: "",
+//     amenities: "",
+//     sections: createEmptySections(),
+//   });
+
+//   /* =======================================================
+//      FORM HANDLERS
+//   ======================================================= */
+
+//   const setField =
+//     (key: string) =>
+//     (
+//       e: React.ChangeEvent<
+//         HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
+//       >
+//     ) => {
+//       setForm((current) => ({
+//         ...current,
+//         [key]: e.target.value,
+//       }));
+//     };
+
+//   const setSectionField = (
+//     index: number,
+//     key: "image" | "desc"
+//   ) => (
+//     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+//   ) => {
+
+//     setForm((current) => {
+
+//       const sections = [...current.sections];
+
+//       sections[index] = {
+//         ...sections[index],
+//         [key]: e.target.value,
+//       };
+
+//       return {
+//         ...current,
+//         sections,
+//       };
+//     });
+//   };
+
+//   /* =======================================================
+//      ADD APARTMENT
+//   ======================================================= */
+
+//   const handleAdd = (e: React.FormEvent) => {
+
+//     e.preventDefault();
+
+//     if (!form.title.trim()) {
+//       toast.error("Please enter an apartment name.");
+//       return;
+//     }
+
+//     if (!form.price || Number(form.price) <= 0) {
+//       toast.error("Please enter a valid price.");
+//       return;
+//     }
+
+//     const mainImage =
+//       form.sections[0].image.trim() || form.image.trim();
+
+//     if (!mainImage) {
+//       toast.error("Please provide an apartment image.");
+//       return;
+//     }
+
+//     const newApartment: Apartment = {
+//       id: Date.now(),
+
+//       title: form.title.trim(),
+
+//       type: form.type,
+
+//       price: Number(form.price),
+
+//       area: form.area.trim(),
+
+//       guests: Number(form.guests),
+
+//       view: form.view.trim(),
+
+//       status: form.status,
+
+//       image: mainImage,
+
+//       description: form.description.trim(),
+
+//       amenities: form.amenities
+//         .split(",")
+//         .map((item) => item.trim())
+//         .filter(Boolean),
+
+//       rating: 0,
+
+//       reviews: 0,
+
+//       sections: form.sections,
+//     };
+
+//     setApartments((current) => [
+//       ...current,
+//       newApartment,
+//     ]);
+
+//     setShowForm(false);
+
+//     setForm({
+//       title: "",
+//       type: "Classic",
+//       price: "",
+//       area: "",
+//       guests: 2,
+//       view: "",
+//       status: "Available",
+//       image: "",
+//       description: "",
+//       amenities: "",
+//       sections: createEmptySections(),
+//     });
+
+//     toast.success("Apartment added!");
+//   };
+
+//   /* =======================================================
+//      UPDATE STATUS
+//   ======================================================= */
+
+//   const updateStatus = (
+//     id: number,
+//     status: ApartmentStatus
+//   ) => {
+
+//     setApartments((current) =>
+//       current.map((apartment) =>
+//         apartment.id === id
+//           ? {
+//               ...apartment,
+//               status,
+//             }
+//           : apartment
+//       )
+//     );
+
+//     setViewApartment((current) =>
+//       current?.id === id
+//         ? {
+//             ...current,
+//             status,
+//           }
+//         : current
+//     );
+
+//     toast.success("Apartment status updated.");
+//   };
+
+//   /* =======================================================
+//      DELETE
+//   ======================================================= */
+
+//   const deleteApartment = (id: number) => {
+
+//     const apartment = apartments.find(
+//       (item) => item.id === id
+//     );
+
+//     if (!apartment) return;
+
+//     const confirmed = window.confirm(
+//       `Remove "${apartment.title}" from the apartment list?`
+//     );
+
+//     if (!confirmed) return;
+
+//     setApartments((current) =>
+//       current.filter((item) => item.id !== id)
+//     );
+
+//     if (viewApartment?.id === id) {
+//       setViewApartment(null);
+//     }
+
+//     toast.success("Apartment removed.");
+//   };
+
+//   /* =======================================================
+//      FILTER
+//   ======================================================= */
+
+//   const filteredApartments = apartments.filter(
+//     (apartment) => {
+
+//       const query = search.toLowerCase().trim();
+
+//       if (!query) return true;
+
+//       return (
+//         apartment.title.toLowerCase().includes(query) ||
+//         apartment.type.toLowerCase().includes(query) ||
+//         apartment.view.toLowerCase().includes(query)
+//       );
+//     }
+//   );
+
+//   return (
+//     <div className="space-y-6">
+
+//       {/* =====================================================
+//           HEADER
+//       ===================================================== */}
+
+//       <div className="flex flex-col sm:flex-row items-start sm:items-end justify-between gap-4">
+
+//         <div>
+
+//           <div className="flex items-center gap-3 mb-2">
+
+//             <div className="w-8 h-px bg-[#c4954a]" />
+
+//             <span className="text-[9px] font-['DM_Mono'] text-[#c4954a] tracking-[0.2em] uppercase">
+//               Property Management
+//             </span>
+
+//           </div>
+
+//           <h2 className="font-['Fraunces'] text-2xl sm:text-3xl text-[#ede4d4]">
+//             Apartments
+//           </h2>
+
+//           <p className="text-xs font-['Jost'] text-[#8a7d6a] mt-1">
+//             Manage Cedar Court apartments, availability and details.
+//           </p>
+
+//         </div>
+
+//         <div className="flex w-full sm:w-auto items-center gap-2">
+
+//           {/* Search */}
+
+//           <div className="relative flex-1 sm:w-56">
+
+//             <Search
+//               size={13}
+//               className="absolute left-3 top-1/2 -translate-y-1/2 text-[#8a7d6a]"
+//             />
+
+//             <input
+//               value={search}
+//               onChange={(e) => setSearch(e.target.value)}
+//               placeholder="Search apartments..."
+//               className={`${INPUT} pl-9`}
+//             />
+
+//           </div>
+
+//           {/* Add */}
+
+//           <button
+//             type="button"
+//             onClick={() => setShowForm(true)}
+//             className="
+//               flex
+//               items-center
+//               gap-2
+//               px-4
+//               py-2.5
+//               bg-[#c4954a]
+//               text-[#0c0a08]
+//               text-xs
+//               font-['DM_Mono']
+//               uppercase
+//               tracking-wider
+//               hover:bg-[#d2a45b]
+//               transition-colors
+//               whitespace-nowrap
+//             "
+//           >
+//             <Plus size={14} />
+
+//             <span className="hidden sm:inline">
+//               Add Apartment
+//             </span>
+//           </button>
+
+//         </div>
+//       </div>
+
+//       {/* =====================================================
+//           APARTMENT GRID
+//       ===================================================== */}
+
+//       <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4">
+
+//         {filteredApartments.map((apartment) => (
+
+//           <div
+//             key={apartment.id}
+//             className="
+//               bg-[#161310]
+//               border
+//               border-[rgba(196,149,74,0.1)]
+//               overflow-hidden
+//               group
+//             "
+//           >
+
+//             {/* Image */}
+
+//             <div className="relative">
+
+//               <img
+//                 src={apartment.image}
+//                 alt={apartment.title}
+//                 className="
+//                   w-full
+//                   h-48
+//                   object-cover
+//                   transition-transform
+//                   duration-500
+//                   group-hover:scale-[1.02]
+//                 "
+//               />
+
+//               <div className="absolute top-3 right-3">
+//                 <RoomStatusBadge status={apartment.status} />
+//               </div>
+
+//               <div className="absolute bottom-3 left-3 bg-black/70 backdrop-blur-sm px-2.5 py-1">
+//                 <span className="text-[9px] font-['DM_Mono'] text-[#c4954a] uppercase tracking-wider">
+//                   {apartment.type}
+//                 </span>
+//               </div>
+
+//             </div>
+
+//             {/* Content */}
+
+//             <div className="p-4">
+
+//               <div className="flex items-start justify-between gap-3 mb-3">
+
+//                 <div>
+
+//                   <h3 className="font-['Fraunces'] text-lg text-[#ede4d4]">
+//                     {apartment.title}
+//                   </h3>
+
+//                   <p className="text-[9px] font-['DM_Mono'] text-[#8a7d6a] mt-1 uppercase tracking-wider">
+//                     {apartment.view}
+//                   </p>
+
+//                 </div>
+
+//                 <div className="text-right shrink-0">
+
+//                   <p className="font-['Fraunces'] text-base text-[#c4954a]">
+//                     ₦{apartment.price.toLocaleString()}
+//                   </p>
+
+//                   <p className="text-[8px] font-['DM_Mono'] text-[#8a7d6a] uppercase">
+//                     / night
+//                   </p>
+
+//                 </div>
+
+//               </div>
+
+//               {/* Meta */}
+
+//               <div className="flex items-center gap-4 pb-3 mb-3 border-b border-[rgba(196,149,74,0.08)]">
+
+//                 <div className="flex items-center gap-1.5 text-[#8a7d6a]">
+//                   <Maximize2 size={12} />
+
+//                   <span className="text-[9px] font-['DM_Mono']">
+//                     {apartment.area}
+//                   </span>
+//                 </div>
+
+//                 <div className="flex items-center gap-1.5 text-[#8a7d6a]">
+//                   <Users size={12} />
+
+//                   <span className="text-[9px] font-['DM_Mono']">
+//                     {apartment.guests} guests
+//                   </span>
+//                 </div>
+
+//                 <div className="flex items-center gap-1.5 text-[#8a7d6a]">
+//                   <BedDouble size={12} />
+
+//                   <span className="text-[9px] font-['DM_Mono']">
+//                     {apartment.reviews} reviews
+//                   </span>
+//                 </div>
+
+//               </div>
+
+//               {/* Actions */}
+
+//               <div className="flex gap-2">
+
+//                 <select
+//                   value={apartment.status}
+//                   onChange={(e) =>
+//                     updateStatus(
+//                       apartment.id,
+//                       e.target.value as ApartmentStatus
+//                     )
+//                   }
+//                   className={`
+//                     ${INPUT}
+//                     text-xs
+//                     py-2
+//                     flex-1
+//                   `}
+//                 >
+//                   {[
+//                     "Available",
+//                     "Occupied",
+//                     "Maintenance",
+//                   ].map((status) => (
+//                     <option
+//                       key={status}
+//                       value={status}
+//                     >
+//                       {status}
+//                     </option>
+//                   ))}
+//                 </select>
+
+//                 <button
+//                   type="button"
+//                   onClick={() =>
+//                     setViewApartment(apartment)
+//                   }
+//                   title="View apartment"
+//                   className="
+//                     px-3
+//                     border
+//                     border-[rgba(196,149,74,0.15)]
+//                     text-[#8a7d6a]
+//                     hover:text-[#c4954a]
+//                     hover:border-[#c4954a]/40
+//                     transition-colors
+//                   "
+//                 >
+//                   <Eye size={14} />
+//                 </button>
+
+//                 <button
+//                   type="button"
+//                   onClick={() =>
+//                     deleteApartment(apartment.id)
+//                   }
+//                   title="Delete apartment"
+//                   className="
+//                     px-3
+//                     border
+//                     border-red-900/40
+//                     text-red-400/70
+//                     hover:text-red-400
+//                     hover:border-red-400/40
+//                     transition-colors
+//                   "
+//                 >
+//                   <Trash2 size={14} />
+//                 </button>
+
+//               </div>
+
+//             </div>
+
+//           </div>
+
+//         ))}
+
+//       </div>
+
+//       {/* =====================================================
+//           EMPTY SEARCH STATE
+//       ===================================================== */}
+
+//       {filteredApartments.length === 0 && (
+
+//         <div className="bg-[#161310] border border-[rgba(196,149,74,0.1)] py-16 text-center">
+
+//           <Search
+//             size={24}
+//             className="mx-auto text-[#8a7d6a]/50 mb-3"
+//           />
+
+//           <h3 className="font-['Fraunces'] text-lg text-[#ede4d4]">
+//             No apartments found
+//           </h3>
+
+//           <p className="text-xs font-['Jost'] text-[#8a7d6a] mt-1">
+//             Try searching for another apartment or type.
+//           </p>
+
+//         </div>
+//       )}
+
+//       {/* =====================================================
+//           ADD APARTMENT MODAL
+//       ===================================================== */}
+
+//       {showForm && (
+
+//         <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+
+//           {/* Overlay */}
+
+//           <div
+//             className="absolute inset-0 bg-black/75 backdrop-blur-sm"
+//             onClick={() => setShowForm(false)}
+//           />
+
+//           {/* Modal */}
+
+//           <div className="relative w-full max-w-4xl max-h-[92vh] overflow-y-auto bg-[#161310] border border-[rgba(196,149,74,0.18)]">
+
+//             {/* Header */}
+
+//             <div className="sticky top-0 z-20 bg-[#161310] border-b border-[rgba(196,149,74,0.1)] px-5 sm:px-6 py-4 flex items-center justify-between">
+
+//               <div>
+
+//                 <p className="text-[9px] font-['DM_Mono'] text-[#c4954a] uppercase tracking-[0.2em] mb-1">
+//                   Property Management
+//                 </p>
+
+//                 <h2 className="font-['Fraunces'] text-xl text-[#ede4d4]">
+//                   Add New Apartment
+//                 </h2>
+
+//               </div>
+
+//               <button
+//                 type="button"
+//                 onClick={() => setShowForm(false)}
+//                 className="w-8 h-8 flex items-center justify-center text-[#8a7d6a] hover:text-[#ede4d4]"
+//               >
+//                 <X size={17} />
+//               </button>
+
+//             </div>
+
+//             {/* Form */}
+
+//             <form
+//               onSubmit={handleAdd}
+//               className="p-5 sm:p-6 space-y-6"
+//             >
+
+//               {/* Basic Information */}
+
+//               <div>
+
+//                 <div className="flex items-center gap-3 mb-4">
+
+//                   <div className="w-6 h-px bg-[#c4954a]" />
+
+//                   <span className="text-[9px] font-['DM_Mono'] text-[#c4954a] uppercase tracking-widest">
+//                     Basic Information
+//                   </span>
+
+//                 </div>
+
+//                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+
+//                   <FormField label="Apartment Name">
+//                     <input
+//                       required
+//                       value={form.title}
+//                       onChange={setField("title")}
+//                       className={INPUT}
+//                       placeholder="The Premier Apartment"
+//                     />
+//                   </FormField>
+
+//                   <FormField label="Type">
+//                     <select
+//                       value={form.type}
+//                       onChange={setField("type")}
+//                       className={INPUT}
+//                     >
+//                       {[
+//                         "Classic",
+//                         "Premier",
+//                         "Signature",
+//                         "Executive",
+//                         "Garden",
+//                         "Penthouse",
+//                       ].map((type) => (
+//                         <option
+//                           key={type}
+//                           value={type}
+//                         >
+//                           {type}
+//                         </option>
+//                       ))}
+//                     </select>
+//                   </FormField>
+
+//                 </div>
+
+//               </div>
+
+//               {/* Property Details */}
+
+//               <div>
+
+//                 <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+
+//                   <FormField label="Price / Night (₦)">
+//                     <input
+//                       required
+//                       type="number"
+//                       min="1"
+//                       value={form.price}
+//                       onChange={setField("price")}
+//                       className={INPUT}
+//                       placeholder="350000"
+//                     />
+//                   </FormField>
+
+//                   <FormField label="Area">
+//                     <input
+//                       value={form.area}
+//                       onChange={setField("area")}
+//                       className={INPUT}
+//                       placeholder="120 m²"
+//                     />
+//                   </FormField>
+
+//                   <FormField label="Guest Capacity">
+//                     <input
+//                       type="number"
+//                       min="1"
+//                       max="20"
+//                       value={form.guests}
+//                       onChange={setField("guests")}
+//                       className={INPUT}
+//                     />
+//                   </FormField>
+
+//                 </div>
+
+//               </div>
+
+//               {/* View / Status / Image */}
+
+//               <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+
+//                 <FormField label="View">
+//                   <input
+//                     value={form.view}
+//                     onChange={setField("view")}
+//                     className={INPUT}
+//                     placeholder="Pool View"
+//                   />
+//                 </FormField>
+
+//                 <FormField label="Status">
+//                   <select
+//                     value={form.status}
+//                     onChange={setField("status")}
+//                     className={INPUT}
+//                   >
+//                     {[
+//                       "Available",
+//                       "Occupied",
+//                       "Maintenance",
+//                     ].map((status) => (
+//                       <option
+//                         key={status}
+//                         value={status}
+//                       >
+//                         {status}
+//                       </option>
+//                     ))}
+//                   </select>
+//                 </FormField>
+
+//                 <FormField label="Main Image URL">
+//                   <input
+//                     value={form.image}
+//                     onChange={setField("image")}
+//                     className={INPUT}
+//                     placeholder="https://..."
+//                   />
+//                 </FormField>
+
+//               </div>
+
+//               {/* Description */}
+
+//               <FormField label="Description">
+//                 <textarea
+//                   required
+//                   value={form.description}
+//                   onChange={setField("description")}
+//                   rows={3}
+//                   className={`${INPUT} resize-none`}
+//                   placeholder="Describe the apartment..."
+//                 />
+//               </FormField>
+
+//               {/* Amenities */}
+
+//               <FormField label="Amenities — comma separated">
+//                 <input
+//                   value={form.amenities}
+//                   onChange={setField("amenities")}
+//                   className={INPUT}
+//                   placeholder="WiFi, AC, Kitchen, Balcony..."
+//                 />
+//               </FormField>
+
+//               {/* Apartment Sections */}
+
+//               <div className="border-t border-[rgba(196,149,74,0.1)] pt-5">
+
+//                 <div className="flex items-center justify-between mb-4">
+
+//                   <div>
+
+//                     <label className="block text-[9px] font-['DM_Mono'] text-[#c4954a] uppercase tracking-widest">
+//                       Apartment Sections
+//                     </label>
+
+//                     <p className="text-[10px] font-['Jost'] text-[#8a7d6a] mt-1">
+//                       Add images and descriptions for each area.
+//                     </p>
+
+//                   </div>
+
+//                   <ImageIcon
+//                     size={16}
+//                     className="text-[#c4954a]"
+//                   />
+
+//                 </div>
+
+//                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+
+//                   {form.sections.map(
+//                     (section, index) => (
+
+//                       <div
+//                         key={section.name}
+//                         className="bg-[#0c0a08] border border-[rgba(196,149,74,0.1)] p-4"
+//                       >
+
+//                         <p className="text-xs font-['DM_Mono'] text-[#c4954a] tracking-widest uppercase mb-3">
+//                           {section.name}
+//                         </p>
+
+//                         <div className="space-y-3">
+
+//                           <FormField label="Image URL">
+//                             <input
+//                               value={section.image}
+//                               onChange={setSectionField(
+//                                 index,
+//                                 "image"
+//                               )}
+//                               className={INPUT}
+//                               placeholder="https://..."
+//                             />
+//                           </FormField>
+
+//                           <FormField label="Description">
+//                             <textarea
+//                               value={section.desc}
+//                               onChange={setSectionField(
+//                                 index,
+//                                 "desc"
+//                               )}
+//                               rows={2}
+//                               className={`${INPUT} resize-none`}
+//                               placeholder={`Describe the ${section.name.toLowerCase()}...`}
+//                             />
+//                           </FormField>
+
+//                         </div>
+
+//                       </div>
+
+//                     )
+//                   )}
+
+//                 </div>
+
+//               </div>
+
+//               {/* Buttons */}
+
+//               <div className="flex flex-col sm:flex-row gap-3 pt-2">
+
+//                 <button
+//                   type="button"
+//                   onClick={() => setShowForm(false)}
+//                   className="
+//                     flex-1
+//                     py-3
+//                     border
+//                     border-[rgba(196,149,74,0.2)]
+//                     text-[#8a7d6a]
+//                     text-xs
+//                     font-['DM_Mono']
+//                     uppercase
+//                     tracking-widest
+//                     hover:text-[#ede4d4]
+//                     hover:border-[rgba(196,149,74,0.4)]
+//                     transition-colors
+//                   "
+//                 >
+//                   Cancel
+//                 </button>
+
+//                 <button
+//                   type="submit"
+//                   className="
+//                     flex-1
+//                     py-3
+//                     bg-[#c4954a]
+//                     text-[#0c0a08]
+//                     text-xs
+//                     font-['DM_Mono']
+//                     uppercase
+//                     tracking-widest
+//                     hover:bg-[#d2a45b]
+//                     transition-colors
+//                   "
+//                 >
+//                   Add Apartment
+//                 </button>
+
+//               </div>
+
+//             </form>
+
+//           </div>
+
+//         </div>
+//       )}
+
+//       {/* =====================================================
+//           DETAILS MODAL
+//       ===================================================== */}
+
+//       {viewApartment && (
+//         <ApartmentDetailsModal
+//           apartment={viewApartment}
+//           onClose={() => setViewApartment(null)}
+//         />
+//       )}
+
+//     </div>
+//   );
+// }
+
+
+
+
+
+
+
+
+
 "use client";
 
 import { useState } from "react";
@@ -18,20 +1437,41 @@ import { toast } from "react-hot-toast";
    TYPES
 ========================================================= */
 
-type ApartmentStatus = "Available" | "Occupied" | "Maintenance";
+type ApartmentStatus =
+  | "available"
+  | "booked"
+  | "maintenance";
 
-type ApartmentSection = {
+type ApartmentCategory = {
+  _id: string;
+  title: string;
+};
+
+type ApartmentAmenity = {
+  _id: string;
   name: string;
-  image: string;
-  desc: string;
+};
+
+type GalleryImage = {
+  id: string;
+  preview: string;
+  file: File;
+  type: string;
+  alt: string;
+};
+
+type StoredGalleryImage = {
+  url: string;
+  type: string;
+  alt?: string;
 };
 
 type Apartment = {
   id: number;
   title: string;
-  type: string;
+  category: ApartmentCategory;
   price: number;
-  area: string;
+  area: number;
   guests: number;
   view: string;
   status: ApartmentStatus;
@@ -40,43 +1480,118 @@ type Apartment = {
   amenities: string[];
   rating: number;
   reviews: number;
-  sections: ApartmentSection[];
+  gallery: StoredGalleryImage[];
+  isFeatured: boolean;
 };
 
 /* =========================================================
-   DEFAULT SECTIONS
+   MOCK CATEGORIES
+   Later these will come from your API
 ========================================================= */
 
-const createEmptySections = (): ApartmentSection[] => [
+const MOCK_CATEGORIES: ApartmentCategory[] = [
   {
-    name: "Sitting Room",
-    image: "",
-    desc: "",
+    _id: "cat-classic",
+    title: "Classic",
   },
   {
-    name: "Master Bedroom",
-    image: "",
-    desc: "",
+    _id: "cat-premier",
+    title: "Premier",
   },
   {
-    name: "Bedroom 2",
-    image: "",
-    desc: "",
+    _id: "cat-signature",
+    title: "Signature",
   },
   {
-    name: "Bedroom 3",
-    image: "",
-    desc: "",
+    _id: "cat-executive",
+    title: "Executive",
   },
   {
+    _id: "cat-garden",
+    title: "Garden",
+  },
+  {
+    _id: "cat-penthouse",
+    title: "Penthouse",
+  },
+];
+
+/* =========================================================
+   MOCK AMENITIES
+   Later these will come from your API
+========================================================= */
+
+const MOCK_AMENITIES: ApartmentAmenity[] = [
+  {
+    _id: "amenity-wifi",
+    name: "WiFi",
+  },
+  {
+    _id: "amenity-ac",
+    name: "Air Conditioning",
+  },
+  {
+    _id: "amenity-king-bed",
+    name: "King Bed",
+  },
+  {
+    _id: "amenity-kitchen",
     name: "Kitchen",
-    image: "",
-    desc: "",
   },
   {
+    _id: "amenity-smart-tv",
+    name: "Smart TV",
+  },
+  {
+    _id: "amenity-balcony",
     name: "Balcony",
-    image: "",
-    desc: "",
+  },
+  {
+    _id: "amenity-pool",
+    name: "Swimming Pool",
+  },
+  {
+    _id: "amenity-parking",
+    name: "Parking",
+  },
+];
+
+/* =========================================================
+   GALLERY TYPES
+========================================================= */
+
+const GALLERY_TYPES = [
+  {
+    value: "living-room",
+    label: "Living Room",
+  },
+  {
+    value: "bedroom",
+    label: "Bedroom",
+  },
+  {
+    value: "kitchen",
+    label: "Kitchen",
+  },
+  {
+    value: "bathroom",
+    label: "Bathroom",
+  },
+  {
+    value: "balcony",
+    label: "Balcony",
+  },
+  {
+    value: "dining-room",
+    label: "Dining Room",
+  },
+  {
+    value: "exterior",
+    label: "Exterior",
+  },
+  {
+    value: "other",
+    label: "Other",
   },
 ];
 
@@ -87,17 +1602,30 @@ const createEmptySections = (): ApartmentSection[] => [
 const INITIAL_APARTMENTS: Apartment[] = [
   {
     id: 1,
+
     title: "Presidential Suite",
-    type: "Signature",
+
+    category: {
+      _id: "cat-signature",
+      title: "Signature",
+    },
+
     price: 850000,
-    area: "120 m²",
+
+    area: 120,
+
     guests: 3,
+
     view: "City View",
-    status: "Available",
+
+    status: "available",
+
     image:
       "https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?auto=format&fit=crop&w=1200&q=80",
+
     description:
       "An expansive luxury suite designed for guests who appreciate refined comfort, privacy and exceptional city views.",
+
     amenities: [
       "WiFi",
       "Air Conditioning",
@@ -106,60 +1634,73 @@ const INITIAL_APARTMENTS: Apartment[] = [
       "Smart TV",
       "Balcony",
     ],
+
     rating: 4.9,
+
     reviews: 18,
-    sections: [
+
+    isFeatured: true,
+
+    gallery: [
       {
-        name: "Sitting Room",
-        image:
-          "https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?auto=format&fit=crop&w=1200&q=80",
-        desc: "Elegant living space with premium furnishings.",
+        url: "https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?auto=format&fit=crop&w=1200&q=80",
+        type: "living-room",
+        alt: "Luxury presidential suite living room",
       },
       {
-        name: "Master Bedroom",
-        image:
-          "https://images.unsplash.com/photo-1616486338812-3dadae4b4ace?auto=format&fit=crop&w=1200&q=80",
-        desc: "Spacious bedroom with a king-size bed.",
+        url: "https://images.unsplash.com/photo-1616486338812-3dadae4b4ace?auto=format&fit=crop&w=1200&q=80",
+        type: "bedroom",
+        alt: "Luxury presidential suite bedroom",
       },
       {
-        name: "Bedroom 2",
-        image:
-          "https://images.unsplash.com/photo-1615874694520-474822394e73?auto=format&fit=crop&w=1200&q=80",
-        desc: "Comfortable guest bedroom.",
+        url: "https://images.unsplash.com/photo-1615874694520-474822394e73?auto=format&fit=crop&w=1200&q=80",
+        type: "bedroom",
+        alt: "Guest bedroom",
       },
       {
-        name: "Bedroom 3",
-        image:
-          "https://images.unsplash.com/photo-1595526114035-0d45ed16cfbf?auto=format&fit=crop&w=1200&q=80",
-        desc: "Quiet bedroom suitable for additional guests.",
+        url: "https://images.unsplash.com/photo-1595526114035-0d45ed16cfbf?auto=format&fit=crop&w=1200&q=80",
+        type: "bedroom",
+        alt: "Additional bedroom",
       },
       {
-        name: "Kitchen",
-        image:
-          "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=1200&q=80",
-        desc: "Fully equipped modern kitchen.",
+        url: "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=1200&q=80",
+        type: "kitchen",
+        alt: "Modern apartment kitchen",
       },
       {
-        name: "Balcony",
-        image:
-          "https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?auto=format&fit=crop&w=1200&q=80",
-        desc: "Private balcony overlooking the city.",
+        url: "https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?auto=format&fit=crop&w=1200&q=80",
+        type: "balcony",
+        alt: "Private balcony overlooking the city",
       },
     ],
   },
+
   {
     id: 2,
+
     title: "Executive Suite",
-    type: "Executive",
+
+    category: {
+      _id: "cat-executive",
+      title: "Executive",
+    },
+
     price: 550000,
-    area: "85 m²",
+
+    area: 85,
+
     guests: 2,
+
     view: "Pool View",
-    status: "Occupied",
+
+    status: "booked",
+
     image:
       "https://images.unsplash.com/photo-1600566753190-17f0baa2a6c3?auto=format&fit=crop&w=1200&q=80",
+
     description:
       "A sophisticated executive apartment combining contemporary design with a peaceful pool-facing setting.",
+
     amenities: [
       "WiFi",
       "Air Conditioning",
@@ -167,95 +1708,138 @@ const INITIAL_APARTMENTS: Apartment[] = [
       "Kitchen",
       "Smart TV",
     ],
+
     rating: 4.7,
+
     reviews: 12,
-    sections: createEmptySections(),
+
+    isFeatured: true,
+
+    gallery: [
+      {
+        url: "https://images.unsplash.com/photo-1600566753190-17f0baa2a6c3?auto=format&fit=crop&w=1200&q=80",
+        type: "living-room",
+        alt: "Executive suite living room",
+      },
+    ],
   },
+
   {
     id: 3,
+
     title: "Deluxe Apartment",
-    type: "Premier",
+
+    category: {
+      _id: "cat-premier",
+      title: "Premier",
+    },
+
     price: 400000,
-    area: "72 m²",
+
+    area: 72,
+
     guests: 3,
+
     view: "Garden View",
-    status: "Available",
+
+    status: "available",
+
     image:
       "https://images.unsplash.com/photo-1600585154526-990dced4db0d?auto=format&fit=crop&w=1200&q=80",
+
     description:
       "A warm and comfortable apartment offering generous living space and tranquil garden views.",
+
     amenities: [
       "WiFi",
       "Air Conditioning",
       "King Bed",
       "Kitchen",
     ],
+
     rating: 4.6,
+
     reviews: 9,
-    sections: createEmptySections(),
+
+    isFeatured: false,
+
+    gallery: [
+      {
+        url: "https://images.unsplash.com/photo-1600585154526-990dced4db0d?auto=format&fit=crop&w=1200&q=80",
+        type: "living-room",
+        alt: "Deluxe apartment living room",
+      },
+    ],
   },
+
   {
     id: 4,
+
     title: "Classic Studio",
-    type: "Classic",
+
+    category: {
+      _id: "cat-classic",
+      title: "Classic",
+    },
+
     price: 250000,
-    area: "48 m²",
+
+    area: 48,
+
     guests: 2,
+
     view: "Garden View",
-    status: "Maintenance",
+
+    status: "maintenance",
+
     image:
       "https://images.unsplash.com/photo-1617104678098-de229db51175?auto=format&fit=crop&w=1200&q=80",
+
     description:
       "A stylish compact studio designed for comfortable short and extended stays.",
+
     amenities: [
       "WiFi",
       "Air Conditioning",
       "Queen Bed",
       "Smart TV",
     ],
+
     rating: 4.5,
+
     reviews: 7,
-    sections: createEmptySections(),
+
+    isFeatured: false,
+
+    gallery: [
+      {
+        url: "https://images.unsplash.com/photo-1617104678098-de229db51175?auto=format&fit=crop&w=1200&q=80",
+        type: "living-room",
+        alt: "Classic studio apartment",
+      },
+    ],
   },
 ];
 
 /* =========================================================
-   STATUS BADGE
+   INPUT STYLE
 ========================================================= */
 
-function RoomStatusBadge({
-  status,
-}: {
-  status: ApartmentStatus;
-}) {
-  const styles: Record<ApartmentStatus, string> = {
-    Available:
-      "text-emerald-400 bg-emerald-400/10 border-emerald-400/20",
-    Occupied:
-      "text-blue-400 bg-blue-400/10 border-blue-400/20",
-    Maintenance:
-      "text-amber-400 bg-amber-400/10 border-amber-400/20",
-  };
-
-  return (
-    <span
-      className={`
-        inline-flex
-        px-2
-        py-1
-        border
-        text-[8px]
-        font-['DM_Mono']
-        uppercase
-        tracking-widest
-        whitespace-nowrap
-        ${styles[status]}
-      `}
-    >
-      {status}
-    </span>
-  );
-}
+const INPUT = `
+  w-full
+  bg-[#0c0a08]
+  border
+  border-[rgba(196,149,74,0.12)]
+  text-[#ede4d4]
+  placeholder:text-[#8a7d6a]/50
+  px-3
+  py-2.5
+  text-sm
+  font-['Jost']
+  outline-none
+  focus:border-[rgba(196,149,74,0.45)]
+  transition-colors
+`;
 
 /* =========================================================
    FORM FIELD
@@ -280,24 +1864,80 @@ function FormField({
 }
 
 /* =========================================================
-   INPUT STYLE
+   STATUS BADGE
 ========================================================= */
 
-const INPUT = `
-  w-full
-  bg-[#0c0a08]
-  border
-  border-[rgba(196,149,74,0.12)]
-  text-[#ede4d4]
-  placeholder:text-[#8a7d6a]/50
-  px-3
-  py-2.5
-  text-sm
-  font-['Jost']
-  outline-none
-  focus:border-[rgba(196,149,74,0.45)]
-  transition-colors
-`;
+function RoomStatusBadge({
+  status,
+}: {
+  status: ApartmentStatus;
+}) {
+  const styles: Record<ApartmentStatus, string> = {
+    available:
+      "text-emerald-400 bg-emerald-400/10 border-emerald-400/20",
+
+    booked:
+      "text-blue-400 bg-blue-400/10 border-blue-400/20",
+
+    maintenance:
+      "text-amber-400 bg-amber-400/10 border-amber-400/20",
+  };
+
+  const labels: Record<ApartmentStatus, string> = {
+    available: "Available",
+    booked: "Booked",
+    maintenance: "Maintenance",
+  };
+
+  return (
+    <span
+      className={`
+        inline-flex
+        px-2
+        py-1
+        border
+        text-[8px]
+        font-['DM_Mono']
+        uppercase
+        tracking-widest
+        whitespace-nowrap
+        ${styles[status]}
+      `}
+    >
+      {labels[status]}
+    </span>
+  );
+}
+
+/* =========================================================
+   DETAIL BOX
+========================================================= */
+
+function DetailBox({
+  icon,
+  label,
+  value,
+}: {
+  icon: React.ReactNode;
+  label: string;
+  value: string;
+}) {
+  return (
+    <div className="bg-[#0c0a08] border border-[rgba(196,149,74,0.08)] p-3">
+      <div className="text-[#c4954a] mb-2">
+        {icon}
+      </div>
+
+      <p className="text-[8px] font-['DM_Mono'] text-[#8a7d6a] uppercase tracking-widest">
+        {label}
+      </p>
+
+      <p className="text-xs font-['Jost'] text-[#ede4d4] mt-1">
+        {value}
+      </p>
+    </div>
+  );
+}
 
 /* =========================================================
    APARTMENT DETAILS MODAL
@@ -312,7 +1952,6 @@ function ApartmentDetailsModal({
 }) {
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
-
       {/* Overlay */}
       <div
         className="absolute inset-0 bg-black/75 backdrop-blur-sm"
@@ -321,10 +1960,8 @@ function ApartmentDetailsModal({
 
       {/* Modal */}
       <div className="relative w-full max-w-3xl max-h-[90vh] overflow-y-auto bg-[#161310] border border-[rgba(196,149,74,0.18)]">
-
         {/* Header */}
         <div className="sticky top-0 z-10 bg-[#161310] border-b border-[rgba(196,149,74,0.1)] px-5 sm:px-6 py-4 flex items-center justify-between">
-
           <div>
             <p className="text-[9px] font-['DM_Mono'] text-[#c4954a] uppercase tracking-[0.2em] mb-1">
               Apartment Details
@@ -345,10 +1982,8 @@ function ApartmentDetailsModal({
         </div>
 
         <div className="p-5 sm:p-6 space-y-6">
-
           {/* Main Image */}
           <div className="relative">
-
             <img
               src={apartment.image}
               alt={apartment.title}
@@ -358,17 +1993,14 @@ function ApartmentDetailsModal({
             <div className="absolute top-3 right-3">
               <RoomStatusBadge status={apartment.status} />
             </div>
-
           </div>
 
           {/* Overview */}
           <div>
-
             <div className="flex items-center justify-between gap-4 mb-3">
-
               <div>
                 <p className="text-[9px] font-['DM_Mono'] text-[#8a7d6a] uppercase tracking-widest">
-                  {apartment.type}
+                  {apartment.category.title}
                 </p>
 
                 <h3 className="font-['Fraunces'] text-xl text-[#ede4d4] mt-1">
@@ -385,22 +2017,19 @@ function ApartmentDetailsModal({
                   per night
                 </p>
               </div>
-
             </div>
 
             <p className="text-sm font-['Jost'] leading-relaxed text-[#8a7d6a]">
               {apartment.description}
             </p>
-
           </div>
 
           {/* Details */}
           <div className="grid grid-cols-3 gap-3">
-
             <DetailBox
               icon={<Maximize2 size={14} />}
               label="Area"
-              value={apartment.area}
+              value={`${apartment.area} m²`}
             />
 
             <DetailBox
@@ -414,18 +2043,28 @@ function ApartmentDetailsModal({
               label="View"
               value={apartment.view}
             />
-
           </div>
+
+          {/* Featured */}
+          {apartment.isFeatured && (
+            <div className="border border-[#c4954a]/20 bg-[#c4954a]/5 px-4 py-3">
+              <p className="text-[9px] font-['DM_Mono'] text-[#c4954a] uppercase tracking-widest">
+                Featured Apartment
+              </p>
+
+              <p className="text-xs text-[#8a7d6a] mt-1">
+                This apartment is currently featured on Cedar Court.
+              </p>
+            </div>
+          )}
 
           {/* Amenities */}
           <div>
-
             <p className="text-[9px] font-['DM_Mono'] text-[#8a7d6a] uppercase tracking-widest mb-3">
               Amenities
             </p>
 
             <div className="flex flex-wrap gap-2">
-
               {apartment.amenities.map((amenity) => (
                 <span
                   key={amenity}
@@ -434,85 +2073,44 @@ function ApartmentDetailsModal({
                   {amenity}
                 </span>
               ))}
-
             </div>
           </div>
 
           {/* Gallery */}
           <div>
-
             <div className="flex items-center justify-between mb-3">
-
               <p className="text-[9px] font-['DM_Mono'] text-[#8a7d6a] uppercase tracking-widest">
-                Apartment Sections
+                Apartment Gallery
               </p>
 
               <span className="text-[9px] font-['DM_Mono'] text-[#8a7d6a]">
-                {apartment.sections.filter((s) => s.image).length} images
+                {apartment.gallery.length} images
               </span>
-
             </div>
 
             <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
+              {apartment.gallery.map((image, index) => (
+                <div
+                  key={`${image.url}-${index}`}
+                  className="relative group"
+                >
+                  <img
+                    src={image.url}
+                    alt={image.alt || apartment.title}
+                    className="w-full h-28 object-cover"
+                  />
 
-              {apartment.sections.map((section, index) => (
-                section.image ? (
-                  <div
-                    key={`${section.name}-${index}`}
-                    className="relative group"
-                  >
-                    <img
-                      src={section.image}
-                      alt={section.name}
-                      className="w-full h-28 object-cover"
-                    />
-
-                    <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/80 to-transparent p-2">
-                      <p className="text-[9px] font-['DM_Mono'] text-white uppercase tracking-wider">
-                        {section.name}
-                      </p>
-                    </div>
+                  <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/80 to-transparent p-2">
+                    <p className="text-[9px] font-['DM_Mono'] text-white uppercase tracking-wider">
+                      {image.type.replace("-", " ")}
+                    </p>
                   </div>
-                ) : null
+                </div>
               ))}
-
             </div>
           </div>
-
         </div>
       </div>
-    </div>
-  );
-}
-
-/* =========================================================
-   DETAIL BOX
-========================================================= */
-
-function DetailBox({
-  icon,
-  label,
-  value,
-}: {
-  icon: React.ReactNode;
-  label: string;
-  value: string;
-}) {
-  return (
-    <div className="bg-[#0c0a08] border border-[rgba(196,149,74,0.08)] p-3">
-
-      <div className="text-[#c4954a] mb-2">
-        {icon}
-      </div>
-
-      <p className="text-[8px] font-['DM_Mono'] text-[#8a7d6a] uppercase tracking-widest">
-        {label}
-      </p>
-
-      <p className="text-xs font-['Jost'] text-[#ede4d4] mt-1">
-        {value}
-      </p>
-
     </div>
   );
 }
@@ -522,7 +2120,6 @@ function DetailBox({
 ========================================================= */
 
 export default function AdminApartments() {
-
   const [apartments, setApartments] =
     useState<Apartment[]>(INITIAL_APARTMENTS);
 
@@ -533,58 +2130,154 @@ export default function AdminApartments() {
 
   const [search, setSearch] = useState("");
 
+  /* =======================================================
+     FORM
+  ======================================================= */
+
   const [form, setForm] = useState({
     title: "",
-    type: "Classic",
+    category: "",
+    description: "",
     price: "",
     area: "",
-    guests: 2,
+    guests: "2",
     view: "",
-    status: "Available" as ApartmentStatus,
-    image: "",
-    description: "",
-    amenities: "",
-    sections: createEmptySections(),
+    status: "available" as ApartmentStatus,
+    amenities: [] as string[],
+    isFeatured: true,
+    gallery: [] as GalleryImage[],
   });
 
   /* =======================================================
-     FORM HANDLERS
+     RESET FORM
   ======================================================= */
 
-  const setField =
-    (key: string) =>
-    (
-      e: React.ChangeEvent<
-        HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
-      >
-    ) => {
-      setForm((current) => ({
-        ...current,
-        [key]: e.target.value,
-      }));
-    };
+  const resetForm = (revokePreviews = true) => {
+    if (revokePreviews) {
+      form.gallery.forEach((image) => {
+        URL.revokeObjectURL(image.preview);
+      });
+    }
 
-  const setSectionField = (
-    index: number,
-    key: "image" | "desc"
-  ) => (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+    setForm({
+      title: "",
+      category: "",
+      description: "",
+      price: "",
+      area: "",
+      guests: "2",
+      view: "",
+      status: "available",
+      amenities: [],
+      isFeatured: true,
+      gallery: [],
+    });
+  };
+
+  /* =======================================================
+     CLOSE FORM
+  ======================================================= */
+
+  const closeForm = () => {
+    resetForm(true);
+    setShowForm(false);
+  };
+
+  /* =======================================================
+     GALLERY FILES
+  ======================================================= */
+
+  const handleGalleryFiles = (
+    e: React.ChangeEvent<HTMLInputElement>
   ) => {
+    const files = Array.from(e.target.files || []);
 
+    if (!files.length) return;
+
+    const newImages: GalleryImage[] = files.map(
+      (file) => ({
+        id: `${Date.now()}-${Math.random()}`,
+        file,
+        preview: URL.createObjectURL(file),
+        type: "other",
+        alt: "",
+      })
+    );
+
+    setForm((current) => ({
+      ...current,
+      gallery: [
+        ...current.gallery,
+        ...newImages,
+      ],
+    }));
+
+    e.target.value = "";
+  };
+
+  /* =======================================================
+     REMOVE GALLERY IMAGE
+  ======================================================= */
+
+  const removeGalleryImage = (id: string) => {
     setForm((current) => {
+      const image = current.gallery.find(
+        (item) => item.id === id
+      );
 
-      const sections = [...current.sections];
-
-      sections[index] = {
-        ...sections[index],
-        [key]: e.target.value,
-      };
+      if (image) {
+        URL.revokeObjectURL(image.preview);
+      }
 
       return {
         ...current,
-        sections,
+        gallery: current.gallery.filter(
+          (item) => item.id !== id
+        ),
       };
     });
+  };
+
+  /* =======================================================
+     UPDATE GALLERY IMAGE
+  ======================================================= */
+
+  const updateGalleryImage = (
+    id: string,
+    field: "type" | "alt",
+    value: string
+  ) => {
+    setForm((current) => ({
+      ...current,
+      gallery: current.gallery.map((image) =>
+        image.id === id
+          ? {
+              ...image,
+              [field]: value,
+            }
+          : image
+      ),
+    }));
+  };
+
+  /* =======================================================
+     TOGGLE AMENITY
+  ======================================================= */
+
+  const toggleAmenity = (amenityId: string) => {
+    setForm((current) => ({
+      ...current,
+      amenities: current.amenities.includes(
+        amenityId
+      )
+        ? current.amenities.filter(
+            (id) => id !== amenityId
+          )
+        : [
+            ...current.amenities,
+            amenityId,
+          ],
+    }));
   };
 
   /* =======================================================
@@ -592,7 +2285,6 @@ export default function AdminApartments() {
   ======================================================= */
 
   const handleAdd = (e: React.FormEvent) => {
-
     e.preventDefault();
 
     if (!form.title.trim()) {
@@ -600,16 +2292,72 @@ export default function AdminApartments() {
       return;
     }
 
-    if (!form.price || Number(form.price) <= 0) {
+    if (!form.category) {
+      toast.error(
+        "Please select an apartment category."
+      );
+      return;
+    }
+
+    if (!form.description.trim()) {
+      toast.error(
+        "Please enter an apartment description."
+      );
+      return;
+    }
+
+    if (
+      !form.price ||
+      Number(form.price) <= 0
+    ) {
       toast.error("Please enter a valid price.");
       return;
     }
 
-    const mainImage =
-      form.sections[0].image.trim() || form.image.trim();
+    if (
+      !form.area ||
+      Number(form.area) <= 0
+    ) {
+      toast.error(
+        "Please enter the apartment area."
+      );
+      return;
+    }
 
-    if (!mainImage) {
-      toast.error("Please provide an apartment image.");
+    if (
+      !form.guests ||
+      Number(form.guests) <= 0
+    ) {
+      toast.error(
+        "Please enter the guest capacity."
+      );
+      return;
+    }
+
+    if (!form.view.trim()) {
+      toast.error(
+        "Please enter the apartment view."
+      );
+      return;
+    }
+
+    if (form.gallery.length === 0) {
+      toast.error(
+        "Please add at least one apartment image."
+      );
+      return;
+    }
+
+    const category =
+      MOCK_CATEGORIES.find(
+        (item) =>
+          item._id === form.category
+      );
+
+    if (!category) {
+      toast.error(
+        "Invalid apartment category."
+      );
       return;
     }
 
@@ -618,11 +2366,11 @@ export default function AdminApartments() {
 
       title: form.title.trim(),
 
-      type: form.type,
+      category,
 
       price: Number(form.price),
 
-      area: form.area.trim(),
+      area: Number(form.area),
 
       guests: Number(form.guests),
 
@@ -630,20 +2378,33 @@ export default function AdminApartments() {
 
       status: form.status,
 
-      image: mainImage,
+      image: form.gallery[0].preview,
 
       description: form.description.trim(),
 
       amenities: form.amenities
-        .split(",")
-        .map((item) => item.trim())
-        .filter(Boolean),
+        .map(
+          (id) =>
+            MOCK_AMENITIES.find(
+              (amenity) =>
+                amenity._id === id
+            )?.name
+        )
+        .filter(Boolean) as string[],
 
       rating: 0,
 
       reviews: 0,
 
-      sections: form.sections,
+      gallery: form.gallery.map(
+        (image) => ({
+          url: image.preview,
+          type: image.type,
+          alt: image.alt,
+        })
+      ),
+
+      isFeatured: form.isFeatured,
     };
 
     setApartments((current) => [
@@ -651,21 +2412,14 @@ export default function AdminApartments() {
       newApartment,
     ]);
 
-    setShowForm(false);
+    /*
+      Important:
+      We do NOT revoke the preview URLs here because
+      the newly-created mock apartment is using them.
+    */
+    resetForm(false);
 
-    setForm({
-      title: "",
-      type: "Classic",
-      price: "",
-      area: "",
-      guests: 2,
-      view: "",
-      status: "Available",
-      image: "",
-      description: "",
-      amenities: "",
-      sections: createEmptySections(),
-    });
+    setShowForm(false);
 
     toast.success("Apartment added!");
   };
@@ -678,7 +2432,6 @@ export default function AdminApartments() {
     id: number,
     status: ApartmentStatus
   ) => {
-
     setApartments((current) =>
       current.map((apartment) =>
         apartment.id === id
@@ -699,7 +2452,9 @@ export default function AdminApartments() {
         : current
     );
 
-    toast.success("Apartment status updated.");
+    toast.success(
+      "Apartment status updated."
+    );
   };
 
   /* =======================================================
@@ -707,10 +2462,10 @@ export default function AdminApartments() {
   ======================================================= */
 
   const deleteApartment = (id: number) => {
-
-    const apartment = apartments.find(
-      (item) => item.id === id
-    );
+    const apartment =
+      apartments.find(
+        (item) => item.id === id
+      );
 
     if (!apartment) return;
 
@@ -721,34 +2476,47 @@ export default function AdminApartments() {
     if (!confirmed) return;
 
     setApartments((current) =>
-      current.filter((item) => item.id !== id)
+      current.filter(
+        (item) => item.id !== id
+      )
     );
 
     if (viewApartment?.id === id) {
       setViewApartment(null);
     }
 
-    toast.success("Apartment removed.");
+    toast.success(
+      "Apartment removed."
+    );
   };
 
   /* =======================================================
-     FILTER
+     SEARCH
   ======================================================= */
 
-  const filteredApartments = apartments.filter(
-    (apartment) => {
-
-      const query = search.toLowerCase().trim();
+  const filteredApartments =
+    apartments.filter((apartment) => {
+      const query =
+        search.toLowerCase().trim();
 
       if (!query) return true;
 
       return (
-        apartment.title.toLowerCase().includes(query) ||
-        apartment.type.toLowerCase().includes(query) ||
-        apartment.view.toLowerCase().includes(query)
+        apartment.title
+          .toLowerCase()
+          .includes(query) ||
+        apartment.category.title
+          .toLowerCase()
+          .includes(query) ||
+        apartment.view
+          .toLowerCase()
+          .includes(query)
       );
-    }
-  );
+    });
+
+  /* =======================================================
+     RENDER
+  ======================================================= */
 
   return (
     <div className="space-y-6">
@@ -760,7 +2528,6 @@ export default function AdminApartments() {
       <div className="flex flex-col sm:flex-row items-start sm:items-end justify-between gap-4">
 
         <div>
-
           <div className="flex items-center gap-3 mb-2">
 
             <div className="w-8 h-px bg-[#c4954a]" />
@@ -776,9 +2543,9 @@ export default function AdminApartments() {
           </h2>
 
           <p className="text-xs font-['Jost'] text-[#8a7d6a] mt-1">
-            Manage Cedar Court apartments, availability and details.
+            Manage Cedar Court apartments,
+            availability and details.
           </p>
-
         </div>
 
         <div className="flex w-full sm:w-auto items-center gap-2">
@@ -794,18 +2561,22 @@ export default function AdminApartments() {
 
             <input
               value={search}
-              onChange={(e) => setSearch(e.target.value)}
+              onChange={(e) =>
+                setSearch(e.target.value)
+              }
               placeholder="Search apartments..."
               className={`${INPUT} pl-9`}
             />
 
           </div>
 
-          {/* Add */}
+          {/* Add Apartment */}
 
           <button
             type="button"
-            onClick={() => setShowForm(true)}
+            onClick={() =>
+              setShowForm(true)
+            }
             className="
               flex
               items-center
@@ -833,203 +2604,235 @@ export default function AdminApartments() {
         </div>
       </div>
 
+
       {/* =====================================================
           APARTMENT GRID
       ===================================================== */}
 
       <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4">
 
-        {filteredApartments.map((apartment) => (
+        {filteredApartments.map(
+          (apartment) => (
+            <div
+              key={apartment.id}
+              className="
+                bg-[#161310]
+                border
+                border-[rgba(196,149,74,0.1)]
+                overflow-hidden
+                group
+              "
+            >
 
-          <div
-            key={apartment.id}
-            className="
-              bg-[#161310]
-              border
-              border-[rgba(196,149,74,0.1)]
-              overflow-hidden
-              group
-            "
-          >
+              {/* Image */}
 
-            {/* Image */}
+              <div className="relative">
 
-            <div className="relative">
+                <img
+                  src={apartment.image}
+                  alt={apartment.title}
+                  className="
+                    w-full
+                    h-48
+                    object-cover
+                    transition-transform
+                    duration-500
+                    group-hover:scale-[1.02]
+                  "
+                />
 
-              <img
-                src={apartment.image}
-                alt={apartment.title}
-                className="
-                  w-full
-                  h-48
-                  object-cover
-                  transition-transform
-                  duration-500
-                  group-hover:scale-[1.02]
-                "
-              />
-
-              <div className="absolute top-3 right-3">
-                <RoomStatusBadge status={apartment.status} />
-              </div>
-
-              <div className="absolute bottom-3 left-3 bg-black/70 backdrop-blur-sm px-2.5 py-1">
-                <span className="text-[9px] font-['DM_Mono'] text-[#c4954a] uppercase tracking-wider">
-                  {apartment.type}
-                </span>
-              </div>
-
-            </div>
-
-            {/* Content */}
-
-            <div className="p-4">
-
-              <div className="flex items-start justify-between gap-3 mb-3">
-
-                <div>
-
-                  <h3 className="font-['Fraunces'] text-lg text-[#ede4d4]">
-                    {apartment.title}
-                  </h3>
-
-                  <p className="text-[9px] font-['DM_Mono'] text-[#8a7d6a] mt-1 uppercase tracking-wider">
-                    {apartment.view}
-                  </p>
-
+                <div className="absolute top-3 right-3">
+                  <RoomStatusBadge
+                    status={
+                      apartment.status
+                    }
+                  />
                 </div>
 
-                <div className="text-right shrink-0">
-
-                  <p className="font-['Fraunces'] text-base text-[#c4954a]">
-                    ₦{apartment.price.toLocaleString()}
-                  </p>
-
-                  <p className="text-[8px] font-['DM_Mono'] text-[#8a7d6a] uppercase">
-                    / night
-                  </p>
-
-                </div>
-
-              </div>
-
-              {/* Meta */}
-
-              <div className="flex items-center gap-4 pb-3 mb-3 border-b border-[rgba(196,149,74,0.08)]">
-
-                <div className="flex items-center gap-1.5 text-[#8a7d6a]">
-                  <Maximize2 size={12} />
-
-                  <span className="text-[9px] font-['DM_Mono']">
-                    {apartment.area}
-                  </span>
-                </div>
-
-                <div className="flex items-center gap-1.5 text-[#8a7d6a]">
-                  <Users size={12} />
-
-                  <span className="text-[9px] font-['DM_Mono']">
-                    {apartment.guests} guests
-                  </span>
-                </div>
-
-                <div className="flex items-center gap-1.5 text-[#8a7d6a]">
-                  <BedDouble size={12} />
-
-                  <span className="text-[9px] font-['DM_Mono']">
-                    {apartment.reviews} reviews
+                <div className="absolute bottom-3 left-3 bg-black/70 backdrop-blur-sm px-2.5 py-1">
+                  <span className="text-[9px] font-['DM_Mono'] text-[#c4954a] uppercase tracking-wider">
+                    {
+                      apartment.category
+                        .title
+                    }
                   </span>
                 </div>
 
               </div>
 
-              {/* Actions */}
 
-              <div className="flex gap-2">
+              {/* Content */}
 
-                <select
-                  value={apartment.status}
-                  onChange={(e) =>
-                    updateStatus(
-                      apartment.id,
-                      e.target.value as ApartmentStatus
-                    )
-                  }
-                  className={`
-                    ${INPUT}
-                    text-xs
-                    py-2
-                    flex-1
-                  `}
-                >
-                  {[
-                    "Available",
-                    "Occupied",
-                    "Maintenance",
-                  ].map((status) => (
-                    <option
-                      key={status}
-                      value={status}
-                    >
-                      {status}
+              <div className="p-4">
+
+                <div className="flex items-start justify-between gap-3 mb-3">
+
+                  <div>
+
+                    <h3 className="font-['Fraunces'] text-lg text-[#ede4d4]">
+                      {
+                        apartment.title
+                      }
+                    </h3>
+
+                    <p className="text-[9px] font-['DM_Mono'] text-[#8a7d6a] mt-1 uppercase tracking-wider">
+                      {apartment.view}
+                    </p>
+
+                  </div>
+
+                  <div className="text-right shrink-0">
+
+                    <p className="font-['Fraunces'] text-base text-[#c4954a]">
+                      ₦
+                      {apartment.price.toLocaleString()}
+                    </p>
+
+                    <p className="text-[8px] font-['DM_Mono'] text-[#8a7d6a] uppercase">
+                      / night
+                    </p>
+
+                  </div>
+
+                </div>
+
+
+                {/* Meta */}
+
+                <div className="flex items-center gap-4 pb-3 mb-3 border-b border-[rgba(196,149,74,0.08)]">
+
+                  <div className="flex items-center gap-1.5 text-[#8a7d6a]">
+
+                    <Maximize2 size={12} />
+
+                    <span className="text-[9px] font-['DM_Mono']">
+                      {apartment.area} m²
+                    </span>
+
+                  </div>
+
+                  <div className="flex items-center gap-1.5 text-[#8a7d6a]">
+
+                    <Users size={12} />
+
+                    <span className="text-[9px] font-['DM_Mono']">
+                      {
+                        apartment.guests
+                      } guests
+                    </span>
+
+                  </div>
+
+                  <div className="flex items-center gap-1.5 text-[#8a7d6a]">
+
+                    <BedDouble size={12} />
+
+                    <span className="text-[9px] font-['DM_Mono']">
+                      {
+                        apartment.reviews
+                      } reviews
+                    </span>
+
+                  </div>
+
+                </div>
+
+
+                {/* Actions */}
+
+                <div className="flex gap-2">
+
+                  <select
+                    value={
+                      apartment.status
+                    }
+                    onChange={(e) =>
+                      updateStatus(
+                        apartment.id,
+                        e.target
+                          .value as ApartmentStatus
+                      )
+                    }
+                    className={`
+                      ${INPUT}
+                      text-xs
+                      py-2
+                      flex-1
+                    `}
+                  >
+                    <option value="available">
+                      Available
                     </option>
-                  ))}
-                </select>
 
-                <button
-                  type="button"
-                  onClick={() =>
-                    setViewApartment(apartment)
-                  }
-                  title="View apartment"
-                  className="
-                    px-3
-                    border
-                    border-[rgba(196,149,74,0.15)]
-                    text-[#8a7d6a]
-                    hover:text-[#c4954a]
-                    hover:border-[#c4954a]/40
-                    transition-colors
-                  "
-                >
-                  <Eye size={14} />
-                </button>
+                    <option value="booked">
+                      Booked
+                    </option>
 
-                <button
-                  type="button"
-                  onClick={() =>
-                    deleteApartment(apartment.id)
-                  }
-                  title="Delete apartment"
-                  className="
-                    px-3
-                    border
-                    border-red-900/40
-                    text-red-400/70
-                    hover:text-red-400
-                    hover:border-red-400/40
-                    transition-colors
-                  "
-                >
-                  <Trash2 size={14} />
-                </button>
+                    <option value="maintenance">
+                      Maintenance
+                    </option>
+                  </select>
+
+
+                  <button
+                    type="button"
+                    onClick={() =>
+                      setViewApartment(
+                        apartment
+                      )
+                    }
+                    title="View apartment"
+                    className="
+                      px-3
+                      border
+                      border-[rgba(196,149,74,0.15)]
+                      text-[#8a7d6a]
+                      hover:text-[#c4954a]
+                      hover:border-[#c4954a]/40
+                      transition-colors
+                    "
+                  >
+                    <Eye size={14} />
+                  </button>
+
+
+                  <button
+                    type="button"
+                    onClick={() =>
+                      deleteApartment(
+                        apartment.id
+                      )
+                    }
+                    title="Delete apartment"
+                    className="
+                      px-3
+                      border
+                      border-red-900/40
+                      text-red-400/70
+                      hover:text-red-400
+                      hover:border-red-400/40
+                      transition-colors
+                    "
+                  >
+                    <Trash2 size={14} />
+                  </button>
+
+                </div>
 
               </div>
 
             </div>
-
-          </div>
-
-        ))}
+          )
+        )}
 
       </div>
+
 
       {/* =====================================================
           EMPTY SEARCH STATE
       ===================================================== */}
 
       {filteredApartments.length === 0 && (
-
         <div className="bg-[#161310] border border-[rgba(196,149,74,0.1)] py-16 text-center">
 
           <Search
@@ -1042,26 +2845,27 @@ export default function AdminApartments() {
           </h3>
 
           <p className="text-xs font-['Jost'] text-[#8a7d6a] mt-1">
-            Try searching for another apartment or type.
+            Try searching for another apartment or category.
           </p>
 
         </div>
       )}
+
 
       {/* =====================================================
           ADD APARTMENT MODAL
       ===================================================== */}
 
       {showForm && (
-
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
 
           {/* Overlay */}
 
           <div
             className="absolute inset-0 bg-black/75 backdrop-blur-sm"
-            onClick={() => setShowForm(false)}
+            onClick={closeForm}
           />
+
 
           {/* Modal */}
 
@@ -1085,22 +2889,25 @@ export default function AdminApartments() {
 
               <button
                 type="button"
-                onClick={() => setShowForm(false)}
-                className="w-8 h-8 flex items-center justify-center text-[#8a7d6a] hover:text-[#ede4d4]"
+                onClick={closeForm}
+                className="w-8 h-8 flex items-center justify-center text-[#8a7d6a] hover:text-[#ede4d4] hover:bg-white/5"
               >
                 <X size={17} />
               </button>
 
             </div>
 
+
             {/* Form */}
 
             <form
               onSubmit={handleAdd}
-              className="p-5 sm:p-6 space-y-6"
+              className="p-5 sm:p-6 space-y-7"
             >
 
-              {/* Basic Information */}
+              {/* =================================================
+                  BASIC INFORMATION
+              ================================================= */}
 
               <div>
 
@@ -1114,241 +2921,711 @@ export default function AdminApartments() {
 
                 </div>
 
+
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
 
                   <FormField label="Apartment Name">
+
                     <input
                       required
                       value={form.title}
-                      onChange={setField("title")}
+                      onChange={(e) =>
+                        setForm(
+                          (current) => ({
+                            ...current,
+                            title: e.target
+                              .value,
+                          })
+                        )
+                      }
                       className={INPUT}
-                      placeholder="The Premier Apartment"
+                      placeholder="Presidential Suite"
                     />
+
                   </FormField>
 
-                  <FormField label="Type">
+
+                  <FormField label="Category">
+
                     <select
-                      value={form.type}
-                      onChange={setField("type")}
+                      required
+                      value={form.category}
+                      onChange={(e) =>
+                        setForm(
+                          (current) => ({
+                            ...current,
+                            category:
+                              e.target
+                                .value,
+                          })
+                        )
+                      }
                       className={INPUT}
                     >
-                      {[
-                        "Classic",
-                        "Premier",
-                        "Signature",
-                        "Executive",
-                        "Garden",
-                        "Penthouse",
-                      ].map((type) => (
-                        <option
-                          key={type}
-                          value={type}
-                        >
-                          {type}
-                        </option>
-                      ))}
+
+                      <option value="">
+                        Select category
+                      </option>
+
+                      {MOCK_CATEGORIES.map(
+                        (category) => (
+                          <option
+                            key={
+                              category._id
+                            }
+                            value={
+                              category._id
+                            }
+                          >
+                            {
+                              category.title
+                            }
+                          </option>
+                        )
+                      )}
+
                     </select>
+
                   </FormField>
 
                 </div>
 
               </div>
 
-              {/* Property Details */}
+
+              {/* =================================================
+                  PROPERTY DETAILS
+              ================================================= */}
 
               <div>
 
                 <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
 
                   <FormField label="Price / Night (₦)">
+
                     <input
                       required
                       type="number"
                       min="1"
                       value={form.price}
-                      onChange={setField("price")}
+                      onChange={(e) =>
+                        setForm(
+                          (current) => ({
+                            ...current,
+                            price: e.target
+                              .value,
+                          })
+                        )
+                      }
                       className={INPUT}
-                      placeholder="350000"
+                      placeholder="850000"
                     />
+
                   </FormField>
 
-                  <FormField label="Area">
+
+                  <FormField label="Area (m²)">
+
                     <input
+                      required
+                      type="number"
+                      min="1"
                       value={form.area}
-                      onChange={setField("area")}
+                      onChange={(e) =>
+                        setForm(
+                          (current) => ({
+                            ...current,
+                            area: e.target
+                              .value,
+                          })
+                        )
+                      }
                       className={INPUT}
-                      placeholder="120 m²"
+                      placeholder="120"
                     />
+
                   </FormField>
+
 
                   <FormField label="Guest Capacity">
+
                     <input
+                      required
                       type="number"
                       min="1"
                       max="20"
                       value={form.guests}
-                      onChange={setField("guests")}
+                      onChange={(e) =>
+                        setForm(
+                          (current) => ({
+                            ...current,
+                            guests:
+                              e.target
+                                .value,
+                          })
+                        )
+                      }
                       className={INPUT}
                     />
+
                   </FormField>
 
                 </div>
 
               </div>
 
-              {/* View / Status / Image */}
+
+              {/* =================================================
+                  VIEW / STATUS / FEATURED
+              ================================================= */}
 
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
 
                 <FormField label="View">
+
                   <input
+                    required
                     value={form.view}
-                    onChange={setField("view")}
+                    onChange={(e) =>
+                      setForm(
+                        (current) => ({
+                          ...current,
+                          view: e.target
+                            .value,
+                        })
+                      )
+                    }
                     className={INPUT}
-                    placeholder="Pool View"
+                    placeholder="City View"
                   />
+
                 </FormField>
+
 
                 <FormField label="Status">
+
                   <select
                     value={form.status}
-                    onChange={setField("status")}
+                    onChange={(e) =>
+                      setForm(
+                        (current) => ({
+                          ...current,
+                          status:
+                            e.target
+                              .value as ApartmentStatus,
+                        })
+                      )
+                    }
                     className={INPUT}
                   >
-                    {[
-                      "Available",
-                      "Occupied",
-                      "Maintenance",
-                    ].map((status) => (
-                      <option
-                        key={status}
-                        value={status}
-                      >
-                        {status}
-                      </option>
-                    ))}
+
+                    <option value="available">
+                      Available
+                    </option>
+
+                    <option value="booked">
+                      Booked
+                    </option>
+
+                    <option value="maintenance">
+                      Maintenance
+                    </option>
+
                   </select>
+
                 </FormField>
 
-                <FormField label="Main Image URL">
-                  <input
-                    value={form.image}
-                    onChange={setField("image")}
-                    className={INPUT}
-                    placeholder="https://..."
-                  />
+
+                <FormField label="Featured">
+
+                  <button
+                    type="button"
+                    onClick={() =>
+                      setForm(
+                        (current) => ({
+                          ...current,
+                          isFeatured:
+                            !current.isFeatured,
+                        })
+                      )
+                    }
+                    className={`
+                      w-full
+                      h-[42px]
+                      border
+                      flex
+                      items-center
+                      justify-between
+                      px-3
+                      ${
+                        form.isFeatured
+                          ? "border-[#c4954a]/50 bg-[#c4954a]/10"
+                          : "border-[rgba(196,149,74,0.12)] bg-[#0c0a08]"
+                      }
+                    `}
+                  >
+
+                    <span className="text-xs font-['Jost'] text-[#ede4d4]">
+                      Featured apartment
+                    </span>
+
+                    <span
+                      className={`
+                        w-8
+                        h-4
+                        rounded-full
+                        relative
+                        transition-colors
+                        ${
+                          form.isFeatured
+                            ? "bg-[#c4954a]"
+                            : "bg-[#3a342c]"
+                        }
+                      `}
+                    >
+
+                      <span
+                        className={`
+                          absolute
+                          top-0.5
+                          w-3
+                          h-3
+                          rounded-full
+                          bg-white
+                          transition-transform
+                          ${
+                            form.isFeatured
+                              ? "translate-x-4"
+                              : "translate-x-0.5"
+                          }
+                        `}
+                      />
+
+                    </span>
+
+                  </button>
+
                 </FormField>
 
               </div>
 
-              {/* Description */}
+
+              {/* =================================================
+                  DESCRIPTION
+              ================================================= */}
 
               <FormField label="Description">
+
                 <textarea
                   required
                   value={form.description}
-                  onChange={setField("description")}
-                  rows={3}
+                  onChange={(e) =>
+                    setForm(
+                      (current) => ({
+                        ...current,
+                        description:
+                          e.target.value,
+                      })
+                    )
+                  }
+                  rows={4}
                   className={`${INPUT} resize-none`}
                   placeholder="Describe the apartment..."
                 />
+
               </FormField>
 
-              {/* Amenities */}
 
-              <FormField label="Amenities — comma separated">
-                <input
-                  value={form.amenities}
-                  onChange={setField("amenities")}
-                  className={INPUT}
-                  placeholder="WiFi, AC, Kitchen, Balcony..."
-                />
-              </FormField>
+              {/* =================================================
+                  AMENITIES
+              ================================================= */}
 
-              {/* Apartment Sections */}
+              <div>
 
-              <div className="border-t border-[rgba(196,149,74,0.1)] pt-5">
-
-                <div className="flex items-center justify-between mb-4">
+                <div className="flex items-center justify-between mb-3">
 
                   <div>
 
                     <label className="block text-[9px] font-['DM_Mono'] text-[#c4954a] uppercase tracking-widest">
-                      Apartment Sections
+                      Amenities
                     </label>
 
                     <p className="text-[10px] font-['Jost'] text-[#8a7d6a] mt-1">
-                      Add images and descriptions for each area.
+                      Select the amenities available in this apartment.
                     </p>
 
                   </div>
 
-                  <ImageIcon
-                    size={16}
-                    className="text-[#c4954a]"
-                  />
+                  <span className="text-[9px] font-['DM_Mono'] text-[#8a7d6a]">
+                    {form.amenities.length} selected
+                  </span>
 
                 </div>
 
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
 
-                  {form.sections.map(
-                    (section, index) => (
+                <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
 
-                      <div
-                        key={section.name}
-                        className="bg-[#0c0a08] border border-[rgba(196,149,74,0.1)] p-4"
-                      >
+                  {MOCK_AMENITIES.map(
+                    (amenity) => {
+                      const selected =
+                        form.amenities.includes(
+                          amenity._id
+                        );
 
-                        <p className="text-xs font-['DM_Mono'] text-[#c4954a] tracking-widest uppercase mb-3">
-                          {section.name}
-                        </p>
+                      return (
+                        <button
+                          key={
+                            amenity._id
+                          }
+                          type="button"
+                          onClick={() =>
+                            toggleAmenity(
+                              amenity._id
+                            )
+                          }
+                          className={`
+                            flex
+                            items-center
+                            gap-2
+                            p-3
+                            border
+                            text-left
+                            transition-colors
+                            ${
+                              selected
+                                ? "border-[#c4954a]/50 bg-[#c4954a]/10 text-[#ede4d4]"
+                                : "border-[rgba(196,149,74,0.1)] bg-[#0c0a08] text-[#8a7d6a] hover:border-[#c4954a]/30"
+                            }
+                          `}
+                        >
 
-                        <div className="space-y-3">
+                          <span
+                            className={`
+                              w-4
+                              h-4
+                              border
+                              flex
+                              items-center
+                              justify-center
+                              shrink-0
+                              ${
+                                selected
+                                  ? "border-[#c4954a] bg-[#c4954a] text-[#0c0a08]"
+                                  : "border-[#8a7d6a]/40"
+                              }
+                            `}
+                          >
 
-                          <FormField label="Image URL">
-                            <input
-                              value={section.image}
-                              onChange={setSectionField(
-                                index,
-                                "image"
-                              )}
-                              className={INPUT}
-                              placeholder="https://..."
-                            />
-                          </FormField>
+                            {selected && (
+                              <span className="text-[10px]">
+                                ✓
+                              </span>
+                            )}
 
-                          <FormField label="Description">
-                            <textarea
-                              value={section.desc}
-                              onChange={setSectionField(
-                                index,
-                                "desc"
-                              )}
-                              rows={2}
-                              className={`${INPUT} resize-none`}
-                              placeholder={`Describe the ${section.name.toLowerCase()}...`}
-                            />
-                          </FormField>
+                          </span>
 
-                        </div>
+                          <span className="text-[10px] font-['Jost']">
+                            {
+                              amenity.name
+                            }
+                          </span>
 
-                      </div>
-
-                    )
+                        </button>
+                      );
+                    }
                   )}
 
                 </div>
 
               </div>
 
-              {/* Buttons */}
+
+              {/* =================================================
+                  APARTMENT GALLERY
+              ================================================= */}
+
+              <div className="border-t border-[rgba(196,149,74,0.1)] pt-6">
+
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-4">
+
+                  <div>
+
+                    <label className="block text-[9px] font-['DM_Mono'] text-[#c4954a] uppercase tracking-widest">
+                      Apartment Gallery
+                    </label>
+
+                    <p className="text-[10px] font-['Jost'] text-[#8a7d6a] mt-1">
+                      Upload photos and assign each image a type.
+                    </p>
+
+                  </div>
+
+
+                  <label
+                    className="
+                      inline-flex
+                      items-center
+                      justify-center
+                      gap-2
+                      px-3
+                      py-2
+                      border
+                      border-[#c4954a]/30
+                      text-[#c4954a]
+                      text-[9px]
+                      font-['DM_Mono']
+                      uppercase
+                      tracking-wider
+                      cursor-pointer
+                      hover:bg-[#c4954a]/10
+                      transition-colors
+                    "
+                  >
+
+                    <Plus size={13} />
+
+                    Add Images
+
+                    <input
+                      type="file"
+                      accept="image/*"
+                      multiple
+                      onChange={
+                        handleGalleryFiles
+                      }
+                      className="hidden"
+                    />
+
+                  </label>
+
+                </div>
+
+
+                {/* Empty Upload Area */}
+
+                {form.gallery.length ===
+                  0 && (
+                  <label
+                    className="
+                      block
+                      border
+                      border-dashed
+                      border-[rgba(196,149,74,0.2)]
+                      bg-[#0c0a08]
+                      p-8
+                      text-center
+                      cursor-pointer
+                      hover:border-[#c4954a]/50
+                      transition-colors
+                    "
+                  >
+
+                    <ImageIcon
+                      size={26}
+                      className="mx-auto text-[#c4954a] mb-3"
+                    />
+
+                    <p className="text-xs font-['Jost'] text-[#ede4d4]">
+                      Select apartment images
+                    </p>
+
+                    <p className="text-[9px] font-['DM_Mono'] text-[#8a7d6a] uppercase tracking-wider mt-2">
+                      JPG, PNG or WEBP
+                    </p>
+
+                    <input
+                      type="file"
+                      accept="image/*"
+                      multiple
+                      onChange={
+                        handleGalleryFiles
+                      }
+                      className="hidden"
+                    />
+
+                  </label>
+                )}
+
+
+                {/* Uploaded Images */}
+
+                {form.gallery.length >
+                  0 && (
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+
+                    {form.gallery.map(
+                      (image, index) => (
+                        <div
+                          key={image.id}
+                          className="
+                            bg-[#0c0a08]
+                            border
+                            border-[rgba(196,149,74,0.1)]
+                            overflow-hidden
+                          "
+                        >
+
+                          {/* Preview */}
+
+                          <div className="relative">
+
+                            <img
+                              src={
+                                image.preview
+                              }
+                              alt={
+                                image.alt ||
+                                `Apartment image ${
+                                  index +
+                                  1
+                                }`
+                              }
+                              className="w-full h-44 object-cover"
+                            />
+
+                            <div className="absolute top-2 left-2">
+
+                              {index ===
+                                0 && (
+                                <span className="
+                                  px-2
+                                  py-1
+                                  bg-[#c4954a]
+                                  text-[#0c0a08]
+                                  text-[8px]
+                                  font-['DM_Mono']
+                                  uppercase
+                                  tracking-wider
+                                ">
+                                  First Image
+                                </span>
+                              )}
+
+                            </div>
+
+
+                            <button
+                              type="button"
+                              onClick={() =>
+                                removeGalleryImage(
+                                  image.id
+                                )
+                              }
+                              className="
+                                absolute
+                                top-2
+                                right-2
+                                w-7
+                                h-7
+                                flex
+                                items-center
+                                justify-center
+                                bg-black/70
+                                text-white
+                                hover:bg-red-500
+                                transition-colors
+                              "
+                            >
+                              <X size={13} />
+                            </button>
+
+                          </div>
+
+
+                          {/* Image Settings */}
+
+                          <div className="p-3 space-y-3">
+
+                            <FormField label="Image Type">
+
+                              <select
+                                value={
+                                  image.type
+                                }
+                                onChange={(
+                                  e
+                                ) =>
+                                  updateGalleryImage(
+                                    image.id,
+                                    "type",
+                                    e.target
+                                      .value
+                                  )
+                                }
+                                className={
+                                  INPUT
+                                }
+                              >
+
+                                {GALLERY_TYPES.map(
+                                  (
+                                    type
+                                  ) => (
+                                    <option
+                                      key={
+                                        type.value
+                                      }
+                                      value={
+                                        type.value
+                                      }
+                                    >
+                                      {
+                                        type.label
+                                      }
+                                    </option>
+                                  )
+                                )}
+
+                              </select>
+
+                            </FormField>
+
+
+                            <FormField label="Alt Text">
+
+                              <input
+                                value={
+                                  image.alt
+                                }
+                                onChange={(
+                                  e
+                                ) =>
+                                  updateGalleryImage(
+                                    image.id,
+                                    "alt",
+                                    e.target
+                                      .value
+                                  )
+                                }
+                                className={
+                                  INPUT
+                                }
+                                placeholder="Luxury living room with city view"
+                              />
+
+                            </FormField>
+
+                          </div>
+
+                        </div>
+                      )
+                    )}
+
+                  </div>
+                )}
+
+              </div>
+
+
+              {/* =================================================
+                  BUTTONS
+              ================================================= */}
 
               <div className="flex flex-col sm:flex-row gap-3 pt-2">
 
                 <button
                   type="button"
-                  onClick={() => setShowForm(false)}
+                  onClick={closeForm}
                   className="
                     flex-1
                     py-3
@@ -1390,9 +3667,9 @@ export default function AdminApartments() {
             </form>
 
           </div>
-
         </div>
       )}
+
 
       {/* =====================================================
           DETAILS MODAL
@@ -1401,7 +3678,9 @@ export default function AdminApartments() {
       {viewApartment && (
         <ApartmentDetailsModal
           apartment={viewApartment}
-          onClose={() => setViewApartment(null)}
+          onClose={() =>
+            setViewApartment(null)
+          }
         />
       )}
 

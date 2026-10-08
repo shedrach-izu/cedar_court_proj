@@ -8,6 +8,8 @@ import { toast } from "react-hot-toast";
 
 import CedarLogo from "@/component/user/CedarLogo";
 
+import api from "@/lib/api";
+
 const INPUT = `
   w-full
   bg-[#0c0a08]
@@ -41,27 +43,36 @@ export default function AdminLogin() {
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
 
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (
+    e: React.FormEvent<HTMLFormElement>
+    ) => {
     e.preventDefault();
 
-    setError("");
     setLoading(true);
+    setError("");
 
-    // Mock authentication for now.
-    await new Promise((resolve) => setTimeout(resolve, 700));
+    try {
+        const response = await api.post("/admin/login", {
+        email,
+        password,
+        });
 
-    if (
-      email === "admin@cedarcourt.co.uk" &&
-      password === "admin123"
-    ) {
-      toast.success("Welcome, Admin.");
+        toast.success(response.data.message);
 
-      router.push("/admin/dashboard");
-    } else {
-      setError("Invalid admin credentials.");
-      setLoading(false);
+        router.push("/admin/dashboard");
+
+    } catch (error: any) {
+        const message =
+        error.response?.data?.message ||
+        "Unable to login";
+
+        setError(message);
+        toast.error(message);
+
+    } finally {
+        setLoading(false);
     }
-  };
+   };
 
   return (
     <main className="min-h-screen bg-[#0c0a08] flex items-center justify-center px-5 py-10">
