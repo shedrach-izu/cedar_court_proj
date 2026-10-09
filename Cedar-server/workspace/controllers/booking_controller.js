@@ -413,3 +413,43 @@ export const cancelBooking = async (req, res) => {
         });
     }
 };
+
+
+
+/**
+ * @description Get all bookings for admin
+ * @route GET /api/admin/bookings
+ * @access Admin
+ */
+export const getAllBookings = async (req, res) => {
+    try {
+        const bookings = await Booking.find()
+            .populate(
+                "user",
+                "name email"
+            )
+            .populate(
+                "apartment",
+                "title price gallery category"
+            )
+            .sort({
+                createdAt: -1,
+            })
+            .lean();
+
+        return res.status(200).json({
+            message: "All bookings retrieved successfully",
+            bookings,
+        });
+
+    } catch (error) {
+        console.log(
+            "Error fetching all bookings:",
+            error
+        );
+
+        return res.status(500).json({
+            message: "Internal server error",
+        });
+    }
+};

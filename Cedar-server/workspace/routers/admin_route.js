@@ -6,6 +6,10 @@ import {
     getAdminStats
 } from "../controllers/admin_controller.js";
 
+import {
+    getAllBookings
+} from "../controllers/booking_controller.js";
+
 import { protect } from "../middleware/protect.js";
 import { admin } from "../middleware/admin.js";
 
@@ -45,5 +49,15 @@ adminRouter.get(
     getAdminStats
 );
 
+// ========================================
+// GET ALL BOOKINGS
+// ========================================
+
+adminRouter.get(
+    "/bookings",
+    protect,
+    admin,
+    getAllBookings
+);
 
 export default adminRouter;
