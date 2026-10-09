@@ -1,7 +1,16 @@
 import express from "express";
 import { protect } from "../middleware/protect.js";
 import { admin } from "../middleware/admin.js";
-import { createApartment, getAllApartments, getApartmentBySlug, getApartmentsByCategoryId, getFeaturedApartments } from "../controllers/apartment_controller.js";
+import {
+    createApartment,
+    getAllApartments,
+    getApartmentBySlug,
+    getApartmentsByCategoryId,
+    getFeaturedApartments,
+    updateApartment,
+    deleteApartment
+} from "../controllers/apartment_controller.js";
+// import { createApartment, getAllApartments, getApartmentBySlug, getApartmentsByCategoryId, getFeaturedApartments } from "../controllers/apartment_controller.js";
 import multer from "multer";
 
 const apartmentRouter = express.Router();
@@ -15,15 +24,27 @@ const upload = multer({
     }
 })
 
-apartmentRouter.post("/create", protect, admin, upload.array("images", 10), createApartment);
-
-apartmentRouter.get("/all-apartments", getAllApartments)
+apartmentRouter.get("/all-apartments", getAllApartments);
 
 apartmentRouter.get("/featured", getFeaturedApartments);
 
+apartmentRouter.get("/category/:id", getApartmentsByCategoryId);
 
-apartmentRouter.get("/:slug", getApartmentBySlug)
+apartmentRouter.get("/:slug", getApartmentBySlug);
 
-apartmentRouter.get("/category/:id", getApartmentsByCategoryId)
+apartmentRouter.patch(
+    "/:id",
+    protect,
+    admin,
+    upload.array("images", 10),
+    updateApartment
+);
+
+apartmentRouter.delete(
+    "/:id",
+    protect,
+    admin,
+    deleteApartment
+);
 
 export default apartmentRouter;

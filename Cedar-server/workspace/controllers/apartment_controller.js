@@ -17,7 +17,7 @@ import slugify from "slugify";
 
 export const createApartment = async (req, res) => {
     try{
-        const { title, description, price, category, amenities, area, guests, view, isFeatured } = req.body;
+        const { title, description, price, category, amenities, area, guests, view, isFeatured, status } = req.body;
 
         if(!title || !description || !price || !category || !amenities || !area || !guests || !view){
             return res.status(400).json({ message: "all fields required" })
@@ -243,3 +243,280 @@ export const getFeaturedApartments = async (req, res) => {
         res.status(500).json({ message: error.message })
     }
 }
+
+
+
+export const updateApartment = async (req, res) => {
+    try {
+        const { id } = req.params;
+
+        const {
+            title,
+            description,
+            price,
+            category,
+            amenities,
+            area,
+            guests,
+            view,
+            status,
+            isFeatured,
+        } = req.body;
+
+        const apartment = await Apartment.findById(id);
+
+        if (!apartment) {
+            return res.status(404).json({
+                message: "Apartment not found",
+            });
+        }
+
+        /* =========================================
+           CATEGORY
+        ========================================= */
+
+        if (category !== undefined) {
+            const existingCategory =
+                await ApartmentCategory.findById(category);
+
+            if (!existingCategory) {
+                return res.status(404).json({
+                    message: "Apartment category not found",
+                });
+            }
+
+            apartment.category = category;
+        }
+
+        /* =========================================
+           TITLE + SLUG
+        ========================================= */
+
+        if (title !== undefined) {
+            const newTitle = title.trim();
+
+            if (!newTitle) {
+                return res.status(400).json({
+                    message: "Apartment title is required",
+                });
+            }
+
+            /*
+             * Only create a new slug if the title changed.
+             */
+
+            if (newTitle !== apartment.title) {
+                const baseSlug = slugify(newTitle, {
+                    lower: true,
+                    strict: true,
+                });
+
+                let slug = baseSlug;
+                let count = 1;
+
+                while (
+                    await Apartment.findOne({
+                        slug,
+                        _id: { $ne: apartment._id },
+                    })
+                ) {
+                    slug = `${baseSlug}-${count}`;
+                    count++;
+                }
+
+                apartment.slug = slug;
+            }
+
+            apartment.title = newTitle;
+        }
+
+        /* =========================================
+           DESCRIPTION
+        ========================================= */
+
+        if (description !== undefined) {
+            apartment.description = description.trim();
+        }
+
+        /* =========================================
+           PRICE
+        ========================================= */
+
+        if (price !== undefined) {
+            const numericPrice = Number(price);
+
+            if (Number.isNaN(numericPrice) || numericPrice <= 0) {
+                return res.status(400).json({
+                    message: "Price must be greater than 0",
+                });
+            }
+
+            apartment.price = numericPrice;
+        }
+
+        /* =========================================
+           AREA
+        ========================================= */
+
+        if (area !== undefined) {
+            const numericArea = Number(area);
+
+            if (Number.isNaN(numericArea) || numericArea <= 0) {
+                return res.status(400).json({
+                    message: "Area must be greater than 0",
+                });
+            }
+
+            apartment.area = numericArea;
+        }
+
+        /* =========================================
+           GUESTS
+        ========================================= */
+
+        if (guests !== undefined) {
+            const numericGuests = Number(guests);
+
+            if (
+                Number.isNaN(numericGuests) ||
+                numericGuests <= 0
+            ) {
+                return res.status(400).json({
+                    message: "Guest capacity must be greater than 0",
+                });
+            }
+
+            apartment.guests = numericGuests;
+        }
+
+        /* =========================================
+           VIEW
+        ========================================= */
+
+        if (view !== undefined) {
+            apartment.view = view.trim();
+        }
+
+        /* =========================================
+           STATUS
+        ========================================= */
+
+        if (status !== undefined) {
+            const validStatuses = [
+                "available",
+                "booked",
+                "maintenance",
+            ];
+
+            if (!validStatuses.includes(status)) {
+                return res.status(400).json({
+                    message: "Invalid apartment status",
+                });
+            }
+
+            apartment.status = status;
+        }
+
+        /* =========================================
+           FEATURED
+        ========================================= */
+
+        if (isFeatured !== undefined) {
+            apartment.isFeatured =
+                isFeatured === true ||
+                isFeatured === "true";
+        }
+
+        /* =========================================
+           AMENITIES
+        ========================================= */
+
+        if (amenities !== undefined) {
+            let apartmentAmenities = amenities;
+
+            if (!Array.isArray(apartmentAmenities)) {
+                apartmentAmenities = [apartmentAmenities];
+            }
+
+            const foundAmenities =
+                await ApartmentAmenity.find({
+                    _id: {
+                        $in: apartmentAmenities,
+                    },
+                });
+
+            if (
+                foundAmenities.length !==
+                apartmentAmenities.length
+            ) {
+                return res.status(400).json({
+                    message: "Some amenities not found",
+                });
+            }
+
+            apartment.amenities = apartmentAmenities;
+        }
+
+        /* =========================================
+           SAVE
+        ========================================= */
+
+        await apartment.save();
+
+        /* =========================================
+           RETURN POPULATED APARTMENT
+        ========================================= */
+
+        const updatedApartment =
+            await Apartment.findById(id)
+                .populate("category")
+                .populate("amenities");
+
+        return res.status(200).json({
+            message: "Apartment updated successfully",
+            apartment: updatedApartment,
+        });
+
+    } catch (error) {
+        console.log(
+            "Error updating apartment:",
+            error
+        );
+
+        return res.status(500).json({
+            message: error.message,
+        });
+    }
+};
+
+
+
+export const deleteApartment = async (req, res) => {
+    try {
+        const { id } = req.params;
+
+        const apartment = await Apartment.findById(id);
+
+        if (!apartment) {
+            return res.status(404).json({
+                message: "Apartment not found",
+            });
+        }
+
+        await Apartment.findByIdAndDelete(id);
+
+        return res.status(200).json({
+            message: "Apartment deleted successfully",
+        });
+
+    } catch (error) {
+        console.log(
+            "Error deleting apartment:",
+            error
+        );
+
+        return res.status(500).json({
+            message: error.message,
+        });
+    }
+};
