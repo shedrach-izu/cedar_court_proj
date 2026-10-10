@@ -15,6 +15,6 @@ export const protect = async (req, res, next) => {
         next();
     }catch (error) {
         console.log("Error in protect middleware:", error);
-        res.status(500).json({ message: "Internal server error" });
+        res.status(401).json({ message: "Invalid or expired token" });
     }
 }

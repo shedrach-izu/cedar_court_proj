@@ -76,7 +76,7 @@ export const createGallery = async (req, res) => {
 
 export const getAllGalleries = async (req, res) => {
     try{
-        const galleries = await Gallery.find();
+        const galleries = await Gallery.find().populate("category", "title");
 
         if(!galleries || galleries.length === 0){
             return res.status(404).json({ message: "galleries not found" })
@@ -114,7 +114,7 @@ export const getAllGalleriesByCategory = async (req, res) => {
             return res.status(404).json({ message: "category not found" })
         }
 
-        const galleries = await Gallery.find({ category: categoryId });
+        const galleries = await Gallery.find({ category: categoryId }).populate("category", "title");
 
         if(!galleries || galleries.length === 0){
             return res.status(404).json({ message: "galleries not found" })
@@ -126,3 +126,44 @@ export const getAllGalleriesByCategory = async (req, res) => {
         res.status(500).json({ message: error.message })
     }
 }
+
+
+
+/**
+ * @description Delete a gallery image
+ * @route DELETE /api/gallery/:id
+ * @access Private/Admin
+ */
+
+export const deleteGallery = async (req, res) => {
+    try {
+        const { id } = req.params;
+
+        const gallery = await Gallery.findById(id);
+
+        if (!gallery) {
+            return res.status(404).json({
+                message: "Gallery image not found"
+            });
+        }
+
+        // Delete image from Cloudinary
+        if (gallery.image?.publicId) {
+            await cloudinary.uploader.destroy(gallery.image.publicId);
+        }
+
+        // Delete gallery document from MongoDB
+        await Gallery.findByIdAndDelete(id);
+
+        return res.status(200).json({
+            message: "Gallery image deleted successfully"
+        });
+
+    } catch (error) {
+        console.log("Error deleting gallery:", error);
+
+        res.status(500).json({
+            message: error.message
+        });
+    }
+};

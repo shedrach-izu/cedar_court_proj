@@ -2,7 +2,7 @@ import express from "express";
 import { protect } from "../middleware/protect.js";
 import { admin } from "../middleware/admin.js";
 import multer from "multer";
-import { createGallery, getAllGalleries, getAllGalleriesByCategory } from "../controllers/gallery_controller.js";
+import { createGallery, getAllGalleries, getAllGalleriesByCategory, deleteGallery } from "../controllers/gallery_controller.js";
 
 const galleryRouter = express.Router();
 
@@ -17,6 +17,8 @@ galleryRouter.post("/create", protect, admin, upload.single("image"), createGall
 
 galleryRouter.get("/galleries", getAllGalleries);
 
-galleryRouter.get("/category/:id", getAllGalleriesByCategory);
+galleryRouter.get("/category/:categoryId", getAllGalleriesByCategory);
+
+galleryRouter.delete("/:id", protect, admin, deleteGallery);
 
 export default galleryRouter

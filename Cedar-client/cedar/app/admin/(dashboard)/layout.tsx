@@ -3,6 +3,8 @@
 import { ReactNode, useState } from "react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
+import { useEffect } from "react";
+import { useAuth } from "@/context/AuthContext";
 
 import {
   LayoutDashboard,
@@ -10,12 +12,12 @@ import {
   BedDouble,
   UtensilsCrossed,
   ChefHat,
-  Users,
   MessageSquare,
   Settings,
   LogOut,
   Menu,
   X,
+  Images
 } from "lucide-react";
 
 import CedarLogo from "@/component/user/CedarLogo";
@@ -47,14 +49,13 @@ const navItems = [
     label: "Menu",
   },
   {
-    href: "/admin/guests",
-    icon: Users,
-    label: "Guests",
-  },
-  {
     href: "/admin/reviews",
     icon: MessageSquare,
     label: "Reviews",
+  },{
+    href: "/admin/gallery",
+    icon: Images,
+    label: "Gallery",
   },
   {
     href: "/admin/settings",
@@ -69,9 +70,23 @@ export default function AdminLayout({
   children: ReactNode;
 }) {
   const pathname = usePathname();
+  const { authUser, loading, isAdmin } = useAuth();
   const router = useRouter();
 
   const [sidebarOpen, setSidebarOpen] = useState(false);
+
+  useEffect(() => {
+    if (loading) return;
+
+    if (!authUser) {
+        router.replace("/");
+        return;
+    }
+
+    if (!isAdmin) {
+        router.replace("/");
+    }
+  }, [loading, authUser, isAdmin, router]);
 
   // Get the current page name from the URL
   const currentPage =
@@ -84,6 +99,18 @@ export default function AdminLayout({
 
     router.push("/admin/login");
   };
+
+  if (loading) {
+    return (
+        <div className="min-h-screen bg-[#0c0a08] text-[#ede4d4] flex items-center justify-center">
+        Checking access...
+        </div>
+    );
+  }
+
+  if (!authUser || !isAdmin) {
+    return null;
+  }
 
   return (
     <div className="min-h-screen bg-[#0c0a08] text-[#ede4d4]">

@@ -102,12 +102,23 @@ export const loginUser = async (req, res) => {
             { expiresIn: "1h" }
         );
 
+        // res.cookie("token", token, {
+        //     httpOnly: true,
+        //     secure: false, // Set to true in production
+        //     sameSite: "lax",
+        //     maxAge: 1000 * 60 * 60 * 24   // 1 day
+        // });
+
+        console.log("SETTING TOKEN COOKIE");
+
         res.cookie("token", token, {
             httpOnly: true,
-            secure: false, // Set to true in production
+            secure: false,
             sameSite: "lax",
-            maxAge: 1000 * 60 * 60 * 24   // 1 day
+            maxAge: 1000 * 60 * 60 * 24
         });
+
+        console.log("TOKEN COOKIE SET");
 
         res.status(200).json({
             message: "User logged in successfully",
@@ -145,3 +156,28 @@ export const logoutUser = async (req, res) => {
         res.status(500).json({ message: error.message })
     }
 }
+
+
+
+export const getCurrentUser = async (req, res) => {
+    try {
+        const user = await User.findById(req.user._id).select("-password");
+
+        if (!user) {
+            return res.status(404).json({
+                message: "User not found"
+            });
+        }
+
+        res.status(200).json({
+            user
+        });
+
+    } catch (error) {
+        console.log("Error getting current user:", error);
+
+        res.status(500).json({
+            message: "Internal server error"
+        });
+    }
+};

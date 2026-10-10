@@ -8,18 +8,33 @@ import {
   ReactNode,
 } from "react";
 
+
 import api from "@/lib/api";
+
+// interface User {
+//   _id: string;
+//   name: string;
+//   email: string;
+// }
 
 interface User {
   _id: string;
   name: string;
   email: string;
+  role: "user" | "admin";
 }
 
 interface AuthContextType {
+  // authUser: User | null;
+  // loading: boolean;
+  // isAuthenticated: boolean;
+
+  // setAuthUser: (user: User | null) => void;
+
   authUser: User | null;
   loading: boolean;
   isAuthenticated: boolean;
+  isAdmin: boolean;
 
   setAuthUser: (user: User | null) => void;
 
@@ -49,8 +64,24 @@ export function AuthProvider({
   const [authUser, setAuthUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
 
+  // useEffect(() => {
+  //   setLoading(false);
+  // }, []);
+
   useEffect(() => {
-    setLoading(false);
+    const restoreAuth = async () => {
+        try {
+            const res = await api.get("/authentication/me");
+
+            setAuthUser(res.data.user);
+        } catch (error) {
+            setAuthUser(null);
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    restoreAuth();
   }, []);
 
   // =========================
@@ -136,6 +167,7 @@ export function AuthProvider({
   };
 
   const isAuthenticated = !!authUser;
+  const isAdmin = authUser?.role === "admin";
 
   return (
     <AuthContext.Provider
@@ -143,6 +175,7 @@ export function AuthProvider({
         authUser,
         loading,
         isAuthenticated,
+        isAdmin,
         setAuthUser,
         login,
         register,
