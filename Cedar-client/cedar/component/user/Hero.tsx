@@ -2,6 +2,7 @@ import React from 'react'
 //import { BTN_PRIMARY, BTN_OUTLINE } from '@/constants';
 import HeroImage from '@/public/cedar_hero.jpg';
 import SectionLabel from './SectionLabel';
+import Link from "next/link";
 const Hero = () => {
     const BTN_PRIMARY = "bg-[#c4954a] text-[#0c0a08] font-['Jost'] font-semibold text-sm tracking-widest uppercase hover:bg-[#d4a55a] transition-colors";
     const BTN_OUTLINE = "border border-[rgba(196,149,74,0.3)] text-[#ede4d4] font-['Jost'] text-sm tracking-widest uppercase hover:border-[#c4954a] hover:text-[#c4954a] transition-all";
@@ -44,8 +45,12 @@ const Hero = () => {
             Three en-suite bedrooms, fully equipped kitchens, and all the comforts of home — in the heart of Nsukka.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <button className={`px-8 py-4 ${BTN_PRIMARY}`}>View Apartments</button>
-            <button className={`px-8 py-4 ${BTN_OUTLINE}`}>Explore Menu</button>
+            <Link className={`px-8 py-4 ${BTN_PRIMARY}`} href="/apartments">
+              View Apartments
+            </Link>
+            <Link className={`px-8 py-4 ${BTN_OUTLINE}`} href="/menu">
+              Explore Menu
+            </Link>
           </div>
         </div>
         <div className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 opacity-60">

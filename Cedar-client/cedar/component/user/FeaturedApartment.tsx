@@ -181,7 +181,7 @@ const FeaturedApartment = () => {
               <br />
 
               <em className="italic text-[#c4954a]">
-                Rooms & Suites
+                Apartments & Suites
               </em>
             </h2>
           </div>

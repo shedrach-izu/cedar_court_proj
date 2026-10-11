@@ -12,13 +12,15 @@ const Dining = () => {
             <div>
               <SectionLabel text="The Restaurant" />
               <h2 className="font-['Fraunces'] text-4xl md:text-5xl text-[#ede4d4] mb-6">Dining as an<br /><em className="italic">Art Form</em></h2>
-              <p className="font-['Jost'] text-[#8a7d6a] leading-relaxed mb-4 font-light">Our restaurant holds two Michelin stars and offers an intimate dining experience. Executive Chef Isabelle Moreau transforms the finest seasonal produce into compositions of remarkable beauty and complexity.</p>
-              <p className="font-['Jost'] text-[#8a7d6a] leading-relaxed mb-8 font-light">The seven-course tasting menu changes with the seasons, while our a la carte offering spans breakfast through late-night dining.</p>
+              {/* <p className="font-['Jost'] text-[#8a7d6a] leading-relaxed mb-4 font-light">Our restaurant holds two Michelin stars and offers an intimate dining experience. Executive Chef Isabelle Moreau transforms the finest seasonal produce into compositions of remarkable beauty and complexity.</p> */}
+              <p className="font-['Jost'] text-[#8a7d6a] leading-relaxed mb-4 font-light">At Cedar Court, dining is about enjoying good food in a relaxed and welcoming setting. Whether you are staying with us or simply stopping by, our menu brings together familiar favourites and carefully prepared dishes made for every kind of occasion.</p>
+              {/* <p className="font-['Jost'] text-[#8a7d6a] leading-relaxed mb-8 font-light">The seven-course tasting menu changes with the seasons, while our a la carte offering spans breakfast through late-night dining.</p> */}
+              <p className="font-['Jost'] text-[#8a7d6a] leading-relaxed mb-8 font-light">Start your morning with breakfast, settle in for lunch, or join us in the evening for a meal with friends and family. Whatever brings you through our doors, we want you to feel comfortable, well looked after, and at home.</p>
               <div className="flex flex-wrap gap-4 mb-8">
                 <button className={`px-6 py-3.5 ${BTN_PRIMARY}`}>View Menu</button>
                 <button className={`px-6 py-3.5 ${BTN_OUTLINE}`}>Reserve a Table</button>
               </div>
-              <div className="flex items-center gap-8">{[["2","Michelin Stars"],["#3","Best Hotel Restaurant"],["Open","7 Days a Week"]].map(([val,label]) => (<div key={label}><div className="font-['Fraunces'] text-xl text-[#c4954a]">{val}</div><div className="text-[10px] font-['DM_Mono'] text-[#8a7d6a]">{label}</div></div>))}</div>
+              <div className="flex items-center gap-8">{[["Fresh","Made to Order"],["Local","Warm Hospitality"],["Open","7 Days a Week"]].map(([val,label]) => (<div key={label}><div className="font-['Fraunces'] text-xl text-[#c4954a]">{val}</div><div className="text-[10px] font-['DM_Mono'] text-[#8a7d6a]">{label}</div></div>))}</div>
             </div>
             <div className="relative">
               <img src="https://images.unsplash.com/photo-1776993298456-98c71c0e177e?w=800&h=700&fit=crop&auto=format" alt="Cedar Court Restaurant" className="w-full h-[500px] object-cover" />

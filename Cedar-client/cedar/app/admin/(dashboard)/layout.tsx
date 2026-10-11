@@ -17,7 +17,8 @@ import {
   LogOut,
   Menu,
   X,
-  Images
+  Images,
+  Mail
 } from "lucide-react";
 
 import CedarLogo from "@/component/user/CedarLogo";
@@ -52,10 +53,16 @@ const navItems = [
     href: "/admin/reviews",
     icon: MessageSquare,
     label: "Reviews",
-  },{
+  },
+  {
     href: "/admin/gallery",
     icon: Images,
     label: "Gallery",
+  },
+  {
+    href: "/admin/messages",
+    icon: Mail,
+    label: "Messages",
   },
   {
     href: "/admin/settings",

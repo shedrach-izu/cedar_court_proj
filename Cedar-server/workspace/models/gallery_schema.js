@@ -16,7 +16,7 @@ const gallerySchema = new mongoose.Schema({
     },
     category: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: "galleryCategory",
+        ref: "GalleryCategory",
         required: true
     }
 }, { timestamps: true });
