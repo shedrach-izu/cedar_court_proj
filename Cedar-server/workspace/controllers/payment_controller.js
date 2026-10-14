@@ -328,6 +328,122 @@ export const initializePayment = async (req, res) => {
 // VERIFY PAYMENT
 // =====================================
 
+// export const verifyPayment = async (req, res) => {
+//     try {
+//         const { reference } = req.params;
+
+//         if (!reference) {
+//             return res.status(400).json({
+//                 success: false,
+//                 message: "Payment reference is required"
+//             });
+//         }
+
+//         // ==============================
+//         // VERIFY WITH PAYSTACK
+//         // ==============================
+
+//         const response = await axios.get(
+//             `https://api.paystack.co/transaction/verify/${reference}`,
+//             {
+//                 headers: {
+//                     Authorization: `Bearer ${process.env.PAYSTACK_SECRET_KEY}`
+//                 }
+//             }
+//         );
+
+//         const payment = response.data.data;
+
+//         if (!payment) {
+//             return res.status(404).json({
+//                 success: false,
+//                 message: "Payment not found"
+//             });
+//         }
+
+//         // ==============================
+//         // FIND ORDER
+//         // ==============================
+
+//         const order = await Order.findOne({
+//             "paymentInfo.reference": reference
+//         });
+
+//         if (!order) {
+//             return res.status(404).json({
+//                 success: false,
+//                 message: "Order associated with this payment was not found"
+//             });
+//         }
+
+//         // Make sure the order belongs to the logged-in user
+//         if (order.user.toString() !== req.user._id.toString()) {
+//             return res.status(403).json({
+//                 success: false,
+//                 message: "You are not authorized to access this order"
+//             });
+//         }
+
+//         // ==============================
+//         // PAYMENT SUCCESSFUL
+//         // ==============================
+
+//         if (payment.status === "success") {
+
+//             order.paymentInfo.paymentStatus = "paid";
+
+//             order.paymentInfo.transactionId =
+//                 payment.id?.toString();
+
+//             order.paymentInfo.channel =
+//                 payment.channel;
+
+//             order.paymentInfo.paidAt =
+//                 payment.paid_at
+//                     ? new Date(payment.paid_at)
+//                     : new Date();
+
+//             order.orderStatus = "confirmed";
+
+//             await order.save();
+
+//             return res.status(200).json({
+//                 success: true,
+//                 message: "Payment verified successfully",
+//                 order
+//             });
+//         }
+
+//         // ==============================
+//         // PAYMENT FAILED
+//         // ==============================
+
+//         order.paymentInfo.paymentStatus = "failed";
+
+//         await order.save();
+
+//         return res.status(400).json({
+//             success: false,
+//             message: "Payment was not successful",
+//             status: payment.status
+//         });
+
+//     } catch (error) {
+//         console.error(
+//             "Verify payment error:",
+//             error.response?.data || error.message
+//         );
+
+//         return res.status(500).json({
+//             success: false,
+//             message: "Failed to verify payment",
+//             error: error.response?.data?.message || error.message
+//         });
+//     }
+// };
+
+
+
 export const verifyPayment = async (req, res) => {
     try {
         const { reference } = req.params;
@@ -335,73 +451,84 @@ export const verifyPayment = async (req, res) => {
         if (!reference) {
             return res.status(400).json({
                 success: false,
-                message: "Payment reference is required"
+                message: "Payment reference is required",
             });
         }
 
-        // ==============================
-        // VERIFY WITH PAYSTACK
-        // ==============================
+        // =====================================
+        // 1. VERIFY PAYMENT WITH PAYSTACK
+        // =====================================
 
         const response = await axios.get(
-            `https://api.paystack.co/transaction/verify/${reference}`,
+            `https://api.paystack.co/transaction/verify/${encodeURIComponent(reference)}`,
             {
                 headers: {
-                    Authorization: `Bearer ${process.env.PAYSTACK_SECRET_KEY}`
-                }
+                    Authorization: `Bearer ${process.env.PAYSTACK_SECRET_KEY}`,
+                },
             }
         );
 
+        if (
+            !response.data.status ||
+            !response.data.data
+        ) {
+            return res.status(400).json({
+                success: false,
+                message: "Unable to verify payment with Paystack",
+            });
+        }
+
         const payment = response.data.data;
 
-        if (!payment) {
-            return res.status(404).json({
-                success: false,
-                message: "Payment not found"
-            });
-        }
-
-        // ==============================
-        // FIND ORDER
-        // ==============================
+        // =====================================
+        // 2. FIND RESTAURANT ORDER
+        // =====================================
 
         const order = await Order.findOne({
-            "paymentInfo.reference": reference
+            "paymentInfo.reference": reference,
         });
 
-        if (!order) {
-            return res.status(404).json({
-                success: false,
-                message: "Order associated with this payment was not found"
-            });
-        }
+        if (order) {
+            // Check ownership
+            if (
+                order.user.toString() !==
+                req.user._id.toString()
+            ) {
+                return res.status(403).json({
+                    success: false,
+                    message: "You are not authorized to access this order",
+                });
+            }
 
-        // Make sure the order belongs to the logged-in user
-        if (order.user.toString() !== req.user._id.toString()) {
-            return res.status(403).json({
-                success: false,
-                message: "You are not authorized to access this order"
-            });
-        }
+            // Check payment status
+            if (payment.status !== "success") {
+                return res.status(400).json({
+                    success: false,
+                    message: "Payment was not successful",
+                    status: payment.status,
+                });
+            }
 
-        // ==============================
-        // PAYMENT SUCCESSFUL
-        // ==============================
+            // Check amount
+            const expectedAmount = Math.round(
+                order.totalPrice * 100
+            );
 
-        if (payment.status === "success") {
+            if (payment.amount !== expectedAmount) {
+                return res.status(400).json({
+                    success: false,
+                    message: "Payment amount does not match the order total",
+                });
+            }
 
+            // Update order payment information
             order.paymentInfo.paymentStatus = "paid";
-
             order.paymentInfo.transactionId =
                 payment.id?.toString();
-
-            order.paymentInfo.channel =
-                payment.channel;
-
-            order.paymentInfo.paidAt =
-                payment.paid_at
-                    ? new Date(payment.paid_at)
-                    : new Date();
+            order.paymentInfo.channel = payment.channel;
+            order.paymentInfo.paidAt = payment.paid_at
+                ? new Date(payment.paid_at)
+                : new Date();
 
             order.orderStatus = "confirmed";
 
@@ -409,23 +536,106 @@ export const verifyPayment = async (req, res) => {
 
             return res.status(200).json({
                 success: true,
-                message: "Payment verified successfully",
-                order
+                type: "order",
+                message: "Order payment verified successfully",
+                order,
             });
         }
 
-        // ==============================
-        // PAYMENT FAILED
-        // ==============================
+        // =====================================
+        // 3. FIND APARTMENT BOOKING
+        // =====================================
 
-        order.paymentInfo.paymentStatus = "failed";
+        const booking = await Booking.findOne({
+            paymentReference: reference,
+        }).populate("apartment");
 
-        await order.save();
+        if (!booking) {
+            return res.status(404).json({
+                success: false,
+                message:
+                    "Order or booking associated with this payment was not found",
+            });
+        }
 
-        return res.status(400).json({
-            success: false,
-            message: "Payment was not successful",
-            status: payment.status
+        // =====================================
+        // 4. CHECK BOOKING OWNERSHIP
+        // =====================================
+
+        if (
+            booking.user.toString() !==
+            req.user._id.toString()
+        ) {
+            return res.status(403).json({
+                success: false,
+                message:
+                    "You are not authorized to access this booking",
+            });
+        }
+
+        // =====================================
+        // 5. CHECK PAYMENT STATUS
+        // =====================================
+
+        if (payment.status !== "success") {
+            return res.status(400).json({
+                success: false,
+                message: "Payment was not successful",
+                status: payment.status,
+            });
+        }
+
+        // Do not confirm a booking that was cancelled.
+        if (booking.status === "cancelled") {
+            return res.status(400).json({
+                success: false,
+                message:
+                    "This booking has been cancelled. Please contact support.",
+            });
+        }
+
+        // =====================================
+        // 6. VERIFY PAYMENT AMOUNT
+        // =====================================
+
+        const expectedBookingAmount = Math.round(
+            booking.totalAmount * 100
+        );
+
+        if (
+            !Number.isFinite(expectedBookingAmount) ||
+            payment.amount !== expectedBookingAmount
+        ) {
+            return res.status(400).json({
+                success: false,
+                message:
+                    "Payment amount does not match the booking total",
+            });
+        }
+
+        // =====================================
+        // 7. UPDATE APARTMENT BOOKING
+        // =====================================
+
+        if (booking.paymentStatus !== "refunded") {
+            booking.paymentStatus = "paid";
+        }
+
+        if (booking.status === "pending") {
+            booking.status = "confirmed";
+        }
+
+        await booking.save();
+
+        // =====================================
+        // 8. RETURN THE REAL BOOKING
+        // =====================================
+
+        return res.status(200).json({
+            success: true,
+            type: "booking",
+            message: "Booking payment verified successfully",
+            booking,
         });
 
     } catch (error) {
@@ -437,10 +647,13 @@ export const verifyPayment = async (req, res) => {
         return res.status(500).json({
             success: false,
             message: "Failed to verify payment",
-            error: error.response?.data?.message || error.message
+            error:
+                error.response?.data?.message ||
+                error.message,
         });
     }
 };
+
 
 
 export const refundPayment = async (req, res) => {

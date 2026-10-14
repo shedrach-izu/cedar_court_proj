@@ -19,6 +19,8 @@ import paymentRouter from "./routers/payment_route.js";
 import reviewRouter from "./routers/review_route.js";
 import bookingRouter from "./routers/booking_route.js";
 import adminRouter from "./routers/admin_route.js";
+import messageRouter from "./routers/message_route.js";
+import settingsRouter from "./routers/settings_route.js";
 
 
 dotenv.config();
@@ -57,6 +59,9 @@ app.use("/api/payment", paymentRouter);
 app.use("/api/review", reviewRouter);
 app.use("/api/booking", bookingRouter);
 app.use("/api/admin", adminRouter);
+app.use("/api/message", messageRouter);
+app.use("/api/setting", settingsRouter);
+
 
 
 const startServer = async () => {

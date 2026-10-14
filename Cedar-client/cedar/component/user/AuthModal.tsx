@@ -288,11 +288,6 @@ const AuthModal = ({
 
                   <button
                     type="button"
-                    onClick={() =>
-                      toast.info(
-                        "Password reset coming soon."
-                      )
-                    }
                     className="text-[#c4954a] hover:underline"
                   >
                     Forgot password?
