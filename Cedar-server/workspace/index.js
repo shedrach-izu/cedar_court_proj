@@ -21,6 +21,7 @@ import bookingRouter from "./routers/booking_route.js";
 import adminRouter from "./routers/admin_route.js";
 import messageRouter from "./routers/message_route.js";
 import settingsRouter from "./routers/settings_route.js";
+import newsletterRouter from "./routers/newsletter_route.js";
 
 
 dotenv.config();
@@ -61,6 +62,7 @@ app.use("/api/booking", bookingRouter);
 app.use("/api/admin", adminRouter);
 app.use("/api/message", messageRouter);
 app.use("/api/setting", settingsRouter);
+app.use("/api/newsletter", newsletterRouter);
 
 
 
