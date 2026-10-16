@@ -226,12 +226,6 @@ function Footer({
               Terms of Use
             </button>
 
-            <button
-              type="button"
-              className="text-xs font-['DM_Mono'] text-[#8a7d6a]/30 hover:text-[#8a7d6a] transition-colors"
-            >
-              Admin Portal
-            </button>
           </div>
         </div>
       </div>

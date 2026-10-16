@@ -2,6 +2,7 @@ import { Award } from "lucide-react";
 import SectionLabel from "@/component/user/SectionLabel";
 //import { BTN_PRIMARY, BTN_OUTLINE } from "@/lib/constants";
 import { toast } from "react-hot-toast";
+import Link from "next/link"
 
 function AboutPage({ setPage }: { setPage: (p: string) => void }) {
     const BTN_PRIMARY = "bg-[#c4954a] text-[#0c0a08] font-['Jost'] font-semibold text-sm tracking-widest uppercase hover:bg-[#d4a55a] transition-colors";
@@ -21,13 +22,13 @@ function AboutPage({ setPage }: { setPage: (p: string) => void }) {
             <p className="font-['Jost'] text-[#8a7d6a] leading-relaxed mb-4 font-light">Located on a private estate in the heart of Mayfair, Cedar Court occupies a Grade I listed townhouse extended to house 48 rooms and suites, four event spaces, a two-Michelin-starred restaurant, and a world-class spa.</p>
             <p className="font-['Jost'] text-[#8a7d6a] leading-relaxed font-light">Today, the hotel is led by General Manager Helena Voss, who has spent seventeen years at Cedar Court refining the art of hospitality.</p>
             <div className="flex gap-4 mt-8">
-              <button className={`px-6 py-3 ${BTN_PRIMARY}`}>Our Rooms</button>
-              <button className={`px-6 py-3 ${BTN_OUTLINE}`}>Contact Us</button>
+              <Link href="/apartments" className={`px-6 py-3 ${BTN_PRIMARY}`}>Our Apartments</Link>
+              <Link href="/contact" className={`px-6 py-3 ${BTN_OUTLINE}`}>Contact Us</Link>
             </div>
           </div>
           <div className="relative">
             <img src="https://images.unsplash.com/photo-1702814160779-4a88cfb330c7?w=800&h=600&fit=crop&auto=format" alt="Cedar Court interior" className="w-full h-96 object-cover" />
-            <div className="absolute -bottom-4 -right-4 bg-[#161310] border border-[rgba(196,149,74,0.2)] p-5 hidden lg:block"><div className="font-['Fraunces'] text-3xl text-[#c4954a]">1987</div><div className="text-[10px] font-['DM_Mono'] text-[#8a7d6a]">Founded in Mayfair</div></div>
+            <div className="absolute -bottom-4 -right-4 bg-[#161310] border border-[rgba(196,149,74,0.2)] p-5 hidden lg:block"><div className="font-['Fraunces'] text-3xl text-[#c4954a]">2019</div><div className="text-[10px] font-['DM_Mono'] text-[#8a7d6a]">Founded in Mayfair</div></div>
           </div>
         </div>
         <div className="bg-[#161310] border border-[rgba(196,149,74,0.12)] p-10 mb-20">
