@@ -1698,7 +1698,15 @@ export default function AdminMenu() {
       ===================================================== */}
 
       <div
+        // className="
+        //   bg-[#161310]
+        //   border
+        //   border-[rgba(196,149,74,0.1)]
+        //   overflow-hidden
+        // "
         className="
+          hidden
+          md:block
           bg-[#161310]
           border
           border-[rgba(196,149,74,0.1)]
