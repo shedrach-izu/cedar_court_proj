@@ -195,16 +195,7 @@ import User from "../models/user_schema.js";
 import jwt from "jsonwebtoken";
 import bcrypt from "bcryptjs";
 import crypto from "crypto";
-import nodemailer from "nodemailer";
-
-// Gmail configuration: EMAIL_USER and EMAIL_PASS in your .env
-const transporter = nodemailer.createTransport({
-  service: "gmail",
-  auth: {
-    user: process.env.EMAIL_USER,
-    pass: process.env.EMAIL_PASS,
-  },
-});
+import transporter from "../config/mailer.js";
 
 const createToken = (user) =>
   jwt.sign(

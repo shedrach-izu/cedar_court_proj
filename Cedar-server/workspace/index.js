@@ -1,5 +1,6 @@
 import express from "express";
-import dotenv from "dotenv";
+// import dotenv from "dotenv";
+import "dotenv/config";
 import cors from "cors";
 import mongoose from "mongoose";
 import cookieParser from "cookie-parser";
@@ -13,7 +14,6 @@ import menuRouter from "./routers/menu_route.js";
 import galleryCategoryRouter from "./routers/gallery_category_route.js";
 import galleryRouter from "./routers/gallery_route.js";
 import cartRouter from "./routers/cart_route.js";
-//import restaurantRouter from "./routers/restaurant_order_route.js";
 import orderRouter from "./routers/order_route.js";
 import paymentRouter from "./routers/payment_route.js";
 import reviewRouter from "./routers/review_route.js";
@@ -24,7 +24,7 @@ import settingsRouter from "./routers/settings_route.js";
 import newsletterRouter from "./routers/newsletter_route.js";
 
 
-dotenv.config();
+// dotenv.config();
 
 const app = express();
 const PORT = process.env.PORT || 9000;

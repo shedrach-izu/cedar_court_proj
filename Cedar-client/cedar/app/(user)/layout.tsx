@@ -1,4 +1,44 @@
+// "use client";
+
+// import Navbar from "@/component/user/Navbar";
+// import Footer from "@/component/user/Footer";
+// import CartSlide from "@/component/user/CartSlide";
+
+// import { AuthProvider } from "@/context/AuthContext";
+// import { CartProvider } from "@/context/CartContext";
+
+// export default function UserLayout({
+//   children,
+// }: {
+//   children: React.ReactNode;
+// }) {
+//   return (
+//     <AuthProvider>
+//       <CartProvider>
+
+//         <Navbar />
+
+//         <CartSlide />
+
+//         <main>
+//           {children}
+//         </main>
+
+//         <Footer />
+
+//       </CartProvider>
+//     </AuthProvider>
+//   );
+// }
+
+
+
+
+
 "use client";
+
+import { ReactNode } from "react";
+import { usePathname } from "next/navigation";
 
 import Navbar from "@/component/user/Navbar";
 import Footer from "@/component/user/Footer";
@@ -10,22 +50,24 @@ import { CartProvider } from "@/context/CartContext";
 export default function UserLayout({
   children,
 }: {
-  children: React.ReactNode;
+  children: ReactNode;
 }) {
+  const pathname = usePathname();
+
+  const isAuthRecoveryPage =
+    pathname === "/forgot-password" ||
+    pathname.startsWith("/reset-password/");
+
   return (
     <AuthProvider>
       <CartProvider>
+        {!isAuthRecoveryPage && <Navbar />}
 
-        <Navbar />
+        {!isAuthRecoveryPage && <CartSlide />}
 
-        <CartSlide />
+        <main>{children}</main>
 
-        <main>
-          {children}
-        </main>
-
-        <Footer />
-
+        {!isAuthRecoveryPage && <Footer />}
       </CartProvider>
     </AuthProvider>
   );

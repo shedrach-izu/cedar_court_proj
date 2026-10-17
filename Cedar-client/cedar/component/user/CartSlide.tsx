@@ -93,12 +93,13 @@ const CartSlide = () => {
                 Your cart is empty
               </p>
 
-              <button
+              <Link
+                href="/menu"
                 onClick={() => setCartOpen(false)}
                 className="text-[#c4954a] text-sm font-['Jost'] hover:underline"
               >
                 Browse our menu
-              </button>
+              </Link>
 
             </div>
 

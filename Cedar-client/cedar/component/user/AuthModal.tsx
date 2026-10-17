@@ -7,6 +7,8 @@ import { toast } from "react-hot-toast";
 import CedarLogo from "@/component/user/CedarLogo";
 import { useAuth } from "@/context/AuthContext";
 
+import Link from "next/link";
+
 interface AuthModalProps {
   mode: "login" | "register";
   setMode: (mode: "login" | "register") => void;
@@ -286,12 +288,12 @@ const AuthModal = ({
                     Remember me
                   </label>
 
-                  <button
-                    type="button"
+                  <Link
+                    href="/forgot-password"
                     className="text-[#c4954a] hover:underline"
                   >
                     Forgot password?
-                  </button>
+                  </Link>
                 </div>
 
                 {/* Submit */}

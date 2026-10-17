@@ -197,26 +197,36 @@ export const getApartmentBySlug = async (req, res) => {
 
 
 
+
 export const getApartmentsByCategoryId = async (req, res) => {
-    try{
-        const id = req.params;
+    try {
+        const { id } = req.params;
 
-        if(!id){
-            return res.status(400).json({ message: "category ID required" })
+        if (!id) {
+            return res.status(400).json({
+                message: "Category ID required",
+            });
         }
 
-        const apartments = await Apartment.find({ category: id }).populate("category");
+        const apartments = await Apartment.find({
+            category: id,
+        })
+            .populate("category")
+            .populate("amenities");
 
-        if(!apartments || apartments.length === 0){
-            return res.status(404).json({ message: "apartment not found" })
-        }
+        return res.status(200).json({
+            apartments,
+        });
 
-        res.status(200).json(apartments)
-    }catch(error){
-        console.log("Error getting apartment by category:", error);
-        res.status(500).json({ message: error.message })
+    } catch (error) {
+        console.log("Error getting apartments by category:", error);
+
+        return res.status(500).json({
+            message: error.message,
+        });
     }
-}
+};
+
 
 
 

@@ -193,14 +193,14 @@ function Navbar() {
               NOTIFICATIONS
           ========================= */}
 
-          <button
+          {/* <button
             className="relative w-10 h-10 flex items-center justify-center text-[#ede4d4]/70 hover:text-[#c4954a] transition-colors"
             title="Notifications"
           >
             <Bell size={20} />
 
             <span className="absolute top-2 right-2 w-2 h-2 bg-[#c4954a] rounded-full" />
-          </button>
+          </button> */}
 
           {/* =========================
               USER
